@@ -1,0 +1,91 @@
+{
+  "filmRuleList": [
+    {
+      "url": "http://www.863hd.com/index.php?m=vod-search",
+      "needHost": true,
+      "type": "ajax",
+      "filmListQuery": ".movie-item-in",
+      "linkQuery": "a",
+      "titleQuery": ".meta a",
+      "hasResCheck": "return page.$eval('#counts', el => +el.innerText)"
+    },
+    {
+      "url": "http://zhannei.baidu.com/cse/search",
+      "filmListQuery": "#results",
+      "q": "?q=#keyWord#&click=1&s=7275932658900104615",
+      "linkQuery": ".c-title a",
+      "needFilter": true,
+      "hasResCheck": "return page.$('.nors').then(res => !res)"
+    },
+    {
+      "url": "http://vip.sllwl.cn/search/",
+      "needHost": true,
+      "hasResCheck": "return page.$('.hy-video-details')",
+      "q": "#keyWord#.html",
+      "filmListQuery": ".hy-video-details .content",
+      "linkQuery": "a",
+      "titleQuery": ".head h3"
+    },
+    {
+      "url": "http://wmsp.cc/search/",
+      "needHost": true,
+      "q": "?s=search-index-wd-#keyWord#-sid-1",
+      "hasResCheck": "\n        return page.$('#contents .kong').then(res => !res)\n      ",
+      "filmListQuery": "#contents .play-txt h5",
+      "linkQuery": "a"
+    },
+    {
+      "url": "https://www.33dy.vip/vodsearch/-------------/",
+      "needHost": true,
+      "needFilter": true,
+      "q": "?wd=#keyWord#",
+      "hasResCheck": "return page.$('.stui-vodlist__media li')",
+      "filmListQuery": ".stui-vodlist__media .detail .title",
+      "linkQuery": "a"
+    },
+    {
+      "url": "http://www.okdy.tv/search/",
+      "q": "wd-#keyWord#.html",
+      "hasResCheck": "return page.$('.searchlist li')",
+      "filmListQuery": ".searchlist .sea-img-details",
+      "linkQuery": ".sea-title a"
+    },
+    {
+      "url": "https://www.wandouys.com/video/search/",
+      "needHost": true,
+      "needFilter": true,
+      "q": "#keyWord#.html",
+      "hasResCheck": "return page.$('.list-unstyled li')",
+      "filmListQuery": ".list-unstyled li",
+      "linkQuery": "h2 a"
+    },
+    {
+      "url": "http://777dm.net/index.php?m=vod-search",
+      "type": "ajax",
+      "hasResCheck": "return page.$('.teleplayx-content-list li')",
+      "filmListQuery": ".teleplayx-content-list li",
+      "linkQuery": ".movie-headline1 a",
+      "needHost": true
+    },
+    {
+      "url": "https://www.77kkpp.com/index.php?m=vod-search",
+      "type": "ajax",
+      "needHost": true,
+      "hasResCheck": "return page.$('#contents li')",
+      "filmListQuery": "#contents > li",
+      "linkQuery": ".play-pic",
+      "titleQuery": "p a"
+    },
+    {
+      "url": "http://www.177dy.com/search",
+      "type": "html",
+      "hasResCheck": "return page.$('.movie-item')",
+      "needHost": true,
+      "needFilter": false,
+      "filmListQuery": ".container > div:nth-child(2) .row .movie-item",
+      "linkQuery": ".meta a",
+      "titleQuery": ".meta a",
+      "q": "?wd=#keyWord#"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 const { URL } = require('url')
 const qs = require('querystring')
+const consola = require('consola')
 const axios = require('axios')
 const low = require('lowdb')
 const _ = require('lodash')
@@ -9,13 +10,22 @@ const db = low(adapter)
 db.defaults({ filmRuleList: {} }).write()
 const ruleList = db.get('filmRuleList').value()
 const rules = {}
-_.forEach(ruleList, function (value, key) {
+_.forEach(ruleList, function (value) {
   rules[value.url] = createCallback(value)
 })
 
 function addFilm(data) {
   db.get('filmRuleList').push(data).write()
+  ruleList.push(data)
   rules[data.url] = createCallback(data)
+}
+
+function editFilm(data) {
+  consola.log(data)
+  const key = data.url
+  db.get('filmRuleList').find(['url', key]).assign(data).write()
+  ruleList[_.findIndex(ruleList, ['url', key])] = data
+  rules[key] = createCallback(data)
 }
 
 function createCallback({ needHost, type = 'html', ajaxType = 'post', hasResCheck, filmListQuery, linkQuery, titleQuery = linkQuery, q, needFilter = false }) {
@@ -31,7 +41,9 @@ function createCallback({ needHost, type = 'html', ajaxType = 'post', hasResChec
         q = q.replace('#keyWord#', keyWord)
         await page.goto(urlString + q, { timeout: 10000 })
       }
-      hasResCheck = new Function('page', hasResCheck)
+      if (typeof hasResCheck !== 'function') {
+        hasResCheck = new Function('page', hasResCheck)
+      }
       const hasRes = await hasResCheck(page)
       if (hasRes) {
         let output = await page.$$eval(filmListQuery, (el, { host, needHost, linkQuery, titleQuery }) => {
@@ -41,7 +53,7 @@ function createCallback({ needHost, type = 'html', ajaxType = 'post', hasResChec
             return { link: needHost ? host + link : link, title }
           })
         }, { host, needHost, linkQuery, titleQuery })
-        output = (needFilter ? output.filter(item => item.includes(keyWord)) : output)
+        output = (needFilter ? output.filter(item => item.title.includes(keyWord)) : output)
         await page.close()
         return output
       } else {
@@ -49,11 +61,13 @@ function createCallback({ needHost, type = 'html', ajaxType = 'post', hasResChec
         return []
       }
     } catch (e) {
+      consola.log(e)
       return []
     }
   }
 }
 
 exports.addFilm = addFilm
-
+exports.editFilm = editFilm
 exports.rules = rules
+exports.ruleList = ruleList

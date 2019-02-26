@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     handleSubmit(e) {
-      e.preventDefault()
+      e && e.preventDefault()
       this.form.validateFields((error) => {
         if (!error) {
           socket.emit(this.type, this.form.getFieldsValue(), () => {

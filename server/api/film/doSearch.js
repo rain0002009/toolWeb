@@ -14,6 +14,9 @@ const run = async (socket) => {
     headless: true,
     executablePath: pkg.executablePath
   })
+  socket.on('get rules', (callback) => {
+    callback(ruleList)
+  })
   socket.emit('get rules', ruleList)
   socket.on('set film name', (filmName) => {
     const percent = { total: Object.keys(rules).length, done: 0 }
@@ -22,11 +25,13 @@ const run = async (socket) => {
 
   socket.on('add film', (data, callback) => {
     addFilm(data)
+    socket.emit('get rules', ruleList)
     callback && callback()
   })
 
   socket.on('edit film', (data, callback) => {
     editFilm(data)
+    socket.emit('get rules', ruleList)
     callback && callback()
   })
 

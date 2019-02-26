@@ -16,15 +16,14 @@ _.forEach(ruleList, function (value) {
 
 function addFilm(data) {
   db.get('filmRuleList').push(data).write()
-  ruleList.push(data)
   rules[data.url] = createCallback(data)
+  consola.log(ruleList)
 }
 
 function editFilm(data) {
   consola.log(data)
   const key = data.url
   db.get('filmRuleList').find(['url', key]).assign(data).write()
-  ruleList[_.findIndex(ruleList, ['url', key])] = data
   rules[key] = createCallback(data)
 }
 

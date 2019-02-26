@@ -20,14 +20,19 @@ export default {
       list: []
     }
   },
+  watch: {
+    '$route': 'getRule'
+  },
   mounted() {
     this.getRule()
   },
   methods: {
     getRule() {
-      socket.on('get rules', (data) => {
+      const callback = (data) => {
         this.list = data || []
-      })
+      }
+      socket.emit('get rules', callback)
+      socket.on('get rules', callback)
     }
   }
 }

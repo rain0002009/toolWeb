@@ -60,6 +60,7 @@ export default {
       this.$refs.form.handleSubmit()
     },
     onSearch(filmName) {
+      if (!filmName) return false
       this.$router.push({ name: 'film-name', params: { name: filmName } })
     }
   }

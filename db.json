@@ -24,15 +24,19 @@
       "q": "#keyWord#.html",
       "filmListQuery": ".hy-video-details .content",
       "linkQuery": "a",
-      "titleQuery": ".head h3"
+      "titleQuery": ".head h3",
+      "type": "ajax",
+      "needFilter": true
     },
     {
       "url": "http://wmsp.cc/search/",
-      "needHost": true,
-      "q": "?s=search-index-wd-#keyWord#-sid-1",
+      "type": "ajax",
       "hasResCheck": "\n        return page.$('#contents .kong').then(res => !res)\n      ",
+      "needHost": true,
+      "needFilter": true,
       "filmListQuery": "#contents .play-txt h5",
-      "linkQuery": "a"
+      "linkQuery": "a",
+      "titleQuery": "a"
     },
     {
       "url": "https://www.33dy.vip/vodsearch/-------------/",
@@ -79,13 +83,13 @@
     {
       "url": "http://www.177dy.com/search",
       "type": "html",
+      "q": "?wd=#keyWord#",
       "hasResCheck": "return page.$('.movie-item')",
       "needHost": true,
-      "needFilter": false,
+      "needFilter": true,
       "filmListQuery": ".container > div:nth-child(2) .row .movie-item",
       "linkQuery": ".meta a",
-      "titleQuery": ".meta a",
-      "q": "?wd=#keyWord#"
+      "titleQuery": ".meta a"
     }
   ]
 }

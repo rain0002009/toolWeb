@@ -90,6 +90,17 @@
       "filmListQuery": ".container > div:nth-child(2) .row .movie-item",
       "linkQuery": ".meta a",
       "titleQuery": ".meta a"
+    },
+    {
+      "url": "https://www.100sp.com/search.asp",
+      "type": "html",
+      "hasResCheck": "return +page.$('.channel h4 .red:nth-child(2)')",
+      "needHost": true,
+      "needFilter": false,
+      "filmListQuery": ".channelbox li",
+      "linkQuery": "h2 a ",
+      "titleQuery": "h2 a",
+      "q": "?searchword=#keyWord#"
     }
   ]
 }

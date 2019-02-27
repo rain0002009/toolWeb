@@ -159,6 +159,7 @@ export default {
         if (!error) {
           socket.emit(this.type, this.form.getFieldsValue(), () => {
             this.$message.info('ok')
+            this.$emit('submit-success')
           })
         }
       })

@@ -25,7 +25,7 @@
       @ok="handleAddFilm"
       @cancel="addFilmVisible = false"
     >
-      <film-form ref="form" />
+      <film-form ref="form" @submit-success="addFilmVisible = false" />
     </a-modal>
   </div>
 </template>

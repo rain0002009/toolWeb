@@ -4,6 +4,7 @@ const consola = require('consola')
 const axios = require('axios')
 const low = require('lowdb')
 const _ = require('lodash')
+const iconv = require('iconv-lite')
 const FileSync = require('lowdb/adapters/FileSync')
 const adapter = new FileSync('./db.json')
 const db = low(adapter)
@@ -17,7 +18,6 @@ _.forEach(ruleList, function (value) {
 function addFilm(data) {
   db.get('filmRuleList').push(data).write()
   rules[data.url] = createCallback(data)
-  consola.log(ruleList)
 }
 
 function editFilm(data) {
@@ -27,7 +27,7 @@ function editFilm(data) {
   rules[key] = createCallback(data)
 }
 
-function createCallback({ needHost, type = 'html', ajaxType = 'post', hasResCheck, filmListQuery, linkQuery, titleQuery = linkQuery, q, needFilter = false }) {
+function createCallback({ needHost, type = 'html', ajaxType = 'post', isTest = false, hasResCheck, charset = 'utf8', filmListQuery, linkQuery, titleQuery = linkQuery, q, needFilter = false }) {
   return async function (urlString, browser, keyWord) {
     const host = new URL(urlString).origin
     const page = await browser.newPage()
@@ -37,6 +37,9 @@ function createCallback({ needHost, type = 'html', ajaxType = 'post', hasResChec
         await page.setContent(data)
       }
       if (type === 'html') {
+        if (charset.replace('-', '') !== 'utf8') {
+          keyWord = [...iconv.encode(keyWord, charset)].map(v => '%' + v.toString(16)).join('')
+        }
         q = q.replace('#keyWord#', keyWord)
         await page.goto(urlString + q, { timeout: 10000 })
       }
@@ -53,13 +56,14 @@ function createCallback({ needHost, type = 'html', ajaxType = 'post', hasResChec
           })
         }, { host, needHost, linkQuery, titleQuery })
         output = (needFilter ? output.filter(item => item.title.includes(keyWord)) : output)
-        await page.close()
+        !isTest && await page.close()
         return output
       } else {
-        await page.close()
+        !isTest && await page.close()
         return []
       }
     } catch (e) {
+      consola.log(urlString + ' 获取失败')
       consola.log(e)
       return []
     }
@@ -70,3 +74,4 @@ exports.addFilm = addFilm
 exports.editFilm = editFilm
 exports.rules = rules
 exports.ruleList = ruleList
+exports.createCallback = createCallback

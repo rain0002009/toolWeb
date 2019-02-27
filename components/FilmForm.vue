@@ -12,6 +12,14 @@
       />
     </a-form-item>
 
+    <a-form-item
+      label="网站字符编码"
+      :label-col="formItemCol.label"
+      :wrapper-col="formItemCol.wrapper"
+    >
+      <a-input v-decorator="['charset', {initialValue: initialValue.charset}]" placeholder="默认为utf8"></a-input>
+    </a-form-item>
+
     <a-form-item label="网站请求类型：" :label-col="formItemCol.label" :wrapper-col="formItemCol.wrapper">
       <a-radio-group
         v-decorator="['type', {initialValue: initialValue.type || 'ajax', rules: [{required: true}]}]"
@@ -99,6 +107,9 @@
     </a-form-item>
 
     <div style="text-align:right;padding-right: 25%">
+      <a-button @click="testRule">
+        测试
+      </a-button>
       <a-button html-type="submit">
         确定
       </a-button>
@@ -153,6 +164,14 @@ export default {
     }
   },
   methods: {
+    testRule() {
+      this.form.validateFields((error) => {
+        if (!error) {
+          const name = prompt('输入搜索内容')
+          name && socket.emit('test film rule', this.form.getFieldsValue(), name)
+        }
+      })
+    },
     handleSubmit(e) {
       e && e.preventDefault()
       this.form.validateFields((error) => {

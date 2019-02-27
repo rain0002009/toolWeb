@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer-core')
 const _ = require('lodash')
 const pkg = require('../../../package.json')
-const { rules, addFilm, editFilm, ruleList } = require('./Rules')
+const { rules, addFilm, editFilm, ruleList, createCallback } = require('./Rules')
 
 function handleBack(liNode, socket, percent) {
   percent.done++
@@ -33,6 +33,16 @@ const run = async (socket) => {
     editFilm(data)
     socket.emit('get rules', ruleList)
     callback && callback()
+  })
+
+  socket.on('test film rule', async (data, filmName, callback) => {
+    data.isTest = true
+    const testBrowser = await puppeteer.launch({
+      headless: false,
+      executablePath: pkg.executablePath
+    })
+    const testCallback = createCallback(data)
+    testCallback(data.url, testBrowser, filmName)
   })
 
   socket.on('disconnect', async function () {

@@ -25,13 +25,13 @@
       "filmListQuery": ".hy-video-details .content",
       "linkQuery": "a",
       "titleQuery": ".head h3",
-      "type": "ajax",
+      "type": "html",
       "needFilter": true
     },
     {
       "url": "http://wmsp.cc/search/",
       "type": "ajax",
-      "hasResCheck": "\n        return page.$('#contents .kong').then(res => !res)\n      ",
+      "hasResCheck": "return page.$('#contents .kong').then(res => !res)",
       "needHost": true,
       "needFilter": true,
       "filmListQuery": "#contents .play-txt h5",
@@ -94,13 +94,14 @@
     {
       "url": "https://www.100sp.com/search.asp",
       "type": "html",
-      "hasResCheck": "return +page.$('.channel h4 .red:nth-child(2)')",
+      "hasResCheck": "return page.$('.channel h4 .red:nth-child(2)').then(res => +res)",
       "needHost": true,
       "needFilter": false,
       "filmListQuery": ".channelbox li",
       "linkQuery": "h2 a ",
       "titleQuery": "h2 a",
-      "q": "?searchword=#keyWord#"
+      "q": "?searchword=#keyWord#",
+      "charset": "gbk"
     }
   ]
 }

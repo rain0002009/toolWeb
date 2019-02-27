@@ -38,7 +38,7 @@ function createCallback({ needHost, type = 'html', ajaxType = 'post', isTest = f
       }
       if (type === 'html') {
         if (charset.replace('-', '') !== 'utf8') {
-          keyWord = [...iconv.encode(keyWord, charset)].map(v => '%' + v.toString(16)).join('')
+          keyWord = [...iconv.encode(keyWord, charset)].map(v => '%' + _.padStart(v.toString(16), 2, '0')).join('')
         }
         q = q.replace('#keyWord#', keyWord)
         await page.goto(urlString + q, { timeout: 10000 })

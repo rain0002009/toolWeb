@@ -36,7 +36,9 @@
       "needFilter": true,
       "filmListQuery": "#contents .play-txt h5",
       "linkQuery": "a",
-      "titleQuery": "a"
+      "titleQuery": "a",
+      "charset": "utf8",
+      "ajaxType": "get"
     },
     {
       "url": "https://www.33dy.vip/vodsearch/-------------/",
@@ -52,7 +54,12 @@
       "q": "wd-#keyWord#.html",
       "hasResCheck": "return page.$('.searchlist li')",
       "filmListQuery": ".searchlist .sea-img-details",
-      "linkQuery": ".sea-title a"
+      "linkQuery": ".sea-title a",
+      "charset": "utf8",
+      "type": "html",
+      "needHost": false,
+      "needFilter": false,
+      "titleQuery": ".sea-title a"
     },
     {
       "url": "https://www.wandouys.com/video/search/",

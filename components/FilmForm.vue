@@ -17,12 +17,12 @@
       :label-col="formItemCol.label"
       :wrapper-col="formItemCol.wrapper"
     >
-      <a-input v-decorator="['charset', {initialValue: initialValue.charset}]" placeholder="默认为utf8" />
+      <a-input v-decorator="['charset', {initialValue: initialValue.charset||'utf8'}]" placeholder="默认为utf8" />
     </a-form-item>
 
     <a-form-item label="网站请求类型：" :label-col="formItemCol.label" :wrapper-col="formItemCol.wrapper">
       <a-radio-group
-        v-decorator="['type', {initialValue: initialValue.type || 'ajax', rules: [{required: true}]}]"
+        v-decorator="['type', {initialValue: initialValue.type, rules: [{required: true}]}]"
         name="type"
         @input="(type)=>filmType=type"
       >
@@ -45,6 +45,25 @@
         v-decorator="['q', {initialValue: initialValue.q, rules: [{required: true}]}]"
         placeholder="如：?q=#keyWord#"
       />
+    </a-form-item>
+
+    <a-form-item
+      v-else
+      label="ajax type"
+      :label-col="formItemCol.label"
+      :wrapper-col="formItemCol.wrapper"
+    >
+      <a-radio-group
+        v-decorator="['ajaxType', {initialValue: initialValue.ajaxType || 'post', rules: [{required: true}]}]"
+        name="ajaxType"
+      >
+        <a-radio-button value="get">
+          get
+        </a-radio-button>
+        <a-radio-button value="post">
+          post
+        </a-radio-button>
+      </a-radio-group>
     </a-form-item>
 
     <a-form-item label="结果检测规则" :label-col="formItemCol.label" :wrapper-col="formItemCol.wrapper">
@@ -126,7 +145,7 @@ export default {
       default() {
         return {
           url: '',
-          type: 'ajax',
+          type: 'html',
           q: '',
           hasResCheck: '',
           needHost: false,
@@ -157,7 +176,7 @@ export default {
     'initialValue.type': {
       immediate: true,
       handler(value) {
-        this.filmType = value
+        this.filmType = value || 'html'
       }
     }
   },

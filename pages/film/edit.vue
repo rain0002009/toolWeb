@@ -2,7 +2,7 @@
   <div class="film-edit">
     <a-collapse v-if="list.length" accordion>
       <a-collapse-panel v-for="(item, index) in list" :key="index" :header="item.url">
-        <film-form :ref="'form'+index" type="edit film" :initial-value="item" />
+        <film-form :ref="'form'+index" :key="index" type="edit film" :initial-value="item" />
       </a-collapse-panel>
     </a-collapse>
   </div>

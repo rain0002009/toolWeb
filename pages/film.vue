@@ -70,6 +70,8 @@ export default {
 <style lang="scss">
   .film {
     height: 100%;
+    display: flex;
+    flex-direction: column;
 
     .container {
       padding: 20px 40px;

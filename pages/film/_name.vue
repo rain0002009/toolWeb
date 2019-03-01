@@ -1,9 +1,11 @@
 <template>
-  <ul>
-    <li v-for="film in films" :key="film.link">
-      <a :href="film.link" target="_blank">{{ film.title }}</a>
-    </li>
-  </ul>
+  <div class="film-name-list" v-bar>
+    <ul>
+      <li v-for="film in films" :key="film.link">
+        <a :href="film.link" target="_blank">{{ film.title }}</a>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -40,6 +42,7 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+  .film-name-list {
+  }
 </style>

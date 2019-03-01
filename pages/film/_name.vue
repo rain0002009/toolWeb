@@ -8,7 +8,6 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import socket from '~/plugins/io'
 
 export default {
   name: 'FilmName',
@@ -29,10 +28,10 @@ export default {
       setPercent: 'film/setPercent'
     }),
     searchFilm() {
-      socket.emit('set film name', this.$route.params.name)
+      this.$socket.emit('set film name', this.$route.params.name)
     },
     getFilms() {
-      socket.on('get films', (data, percent) => {
+      this.$socket.on('get films', (data, percent) => {
         this.setPercent(percent)
         this.films = this.films.concat(data)
       })

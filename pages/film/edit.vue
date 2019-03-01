@@ -10,7 +10,6 @@
 
 <script>
 import FilmForm from '~/components/FilmForm'
-import socket from '~/plugins/io'
 
 export default {
   name: 'FilmEdit',
@@ -31,8 +30,8 @@ export default {
       const callback = (data) => {
         this.list = data || []
       }
-      socket.emit('get rules', callback)
-      socket.on('get rules', callback)
+      this.$socket.emit('get rules', callback)
+      this.$socket.on('get rules', callback)
     }
   }
 }

@@ -17,7 +17,7 @@
       :label-col="formItemCol.label"
       :wrapper-col="formItemCol.wrapper"
     >
-      <a-input v-decorator="['charset', {initialValue: initialValue.charset}]" placeholder="默认为utf8"></a-input>
+      <a-input v-decorator="['charset', {initialValue: initialValue.charset}]" placeholder="默认为utf8" />
     </a-form-item>
 
     <a-form-item label="网站请求类型：" :label-col="formItemCol.label" :wrapper-col="formItemCol.wrapper">
@@ -118,8 +118,6 @@
 </template>
 
 <script>
-import socket from '~/plugins/io'
-
 export default {
   name: 'FilmForm',
   props: {
@@ -168,7 +166,7 @@ export default {
       this.form.validateFields((error) => {
         if (!error) {
           const name = prompt('输入搜索内容')
-          name && socket.emit('test film rule', this.form.getFieldsValue(), name)
+          name && this.$socket.emit('test film rule', this.form.getFieldsValue(), name)
         }
       })
     },
@@ -176,7 +174,7 @@ export default {
       e && e.preventDefault()
       this.form.validateFields((error) => {
         if (!error) {
-          socket.emit(this.type, this.form.getFieldsValue(), () => {
+          this.$socket.emit(this.type, this.form.getFieldsValue(), () => {
             this.$message.info('ok')
             this.$emit('submit-success')
           })

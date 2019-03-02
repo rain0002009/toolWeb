@@ -31,6 +31,10 @@ function createCallback({ needHost, type = 'html', ajaxType = 'post', isTest = f
   return async function (urlString, browser, keyWord) {
     const host = new URL(urlString).origin
     const page = await browser.newPage()
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36')
+    if (typeof hasResCheck !== 'function') {
+      hasResCheck = new Function('page', hasResCheck)
+    }
     try {
       if (type === 'ajax') {
         const data = await axios[ajaxType](urlString, qs.stringify({ wd: keyWord })).then(({ data }) => data)
@@ -42,9 +46,6 @@ function createCallback({ needHost, type = 'html', ajaxType = 'post', isTest = f
         }
         q = q.replace('#keyWord#', keyWord)
         await page.goto(urlString + q, { timeout: 10000 })
-      }
-      if (typeof hasResCheck !== 'function') {
-        hasResCheck = new Function('page', hasResCheck)
       }
       const hasRes = await hasResCheck(page)
       if (hasRes) {

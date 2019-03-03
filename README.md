@@ -10,3 +10,4 @@
 ` npm run dev`
 #### 功能包含：
 + 影视搜索（需要在package配置executablePath）
++ 图片转字符画

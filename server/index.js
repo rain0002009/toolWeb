@@ -10,7 +10,7 @@ const io = require('socket.io')(server)
 const config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
 
-io.on('connection', require('./api/film/doSearch'))
+io.on('connection', require('./api/socketCallback'))
 
 async function start() {
   // Init Nuxt.js

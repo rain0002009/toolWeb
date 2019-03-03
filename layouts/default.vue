@@ -1,8 +1,8 @@
 <template>
   <a-layout class="main-layout" :has-sider="true">
     <a-layout-sider>
-      <a-menu>
-        <a-menu-item v-for="(menuItem, index) in menus" :key="index">
+      <a-menu v-model="selected" theme="dark">
+        <a-menu-item v-for="menuItem in menus" :key="menuItem.link">
           <nuxt-link :to="menuItem.link">
             {{ menuItem.name }}
           </nuxt-link>
@@ -69,7 +69,12 @@
 export default {
   data() {
     return {
-      menus: [{ name: '影视搜索', link: '/film' }]
+      menus: [{ name: '影视搜索', link: '/film' }, { name: '图片转字符画', link: '/pic2ascii' }]
+    }
+  },
+  computed: {
+    selected() {
+      return [this.$route.path]
     }
   }
 }

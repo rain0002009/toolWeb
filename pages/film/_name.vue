@@ -1,5 +1,5 @@
 <template>
-  <div class="film-name-list" v-bar>
+  <div v-bar class="film-name-list">
     <ul>
       <li v-for="film in films" :key="film.link">
         <a :href="film.link" target="_blank">{{ film.title }}</a>

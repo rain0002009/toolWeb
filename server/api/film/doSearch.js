@@ -9,16 +9,17 @@ function handleBack(liNode, socket, percent) {
   return false
 }
 
-const run = async (socket) => {
-  const browserBack = await puppeteer.launch({
-    headless: true,
-    executablePath: pkg.executablePath
-  })
+const run = (socket) => {
+  let browserBack = null
   socket.on('get rules', (callback) => {
     callback(ruleList)
   })
   socket.emit('get rules', ruleList)
-  socket.on('set film name', (filmName) => {
+  socket.on('set film name', async (filmName) => {
+    browserBack = await puppeteer.launch({
+      headless: true,
+      executablePath: pkg.executablePath
+    })
     const percent = { total: Object.keys(rules).length, done: 0 }
     _.map(rules, (go, url) => go(url, browserBack, filmName).then(liNode => handleBack(liNode, socket, percent)))
   })
@@ -46,7 +47,7 @@ const run = async (socket) => {
   })
 
   socket.on('disconnect', async function () {
-    await browserBack.close()
+    browserBack && await browserBack.close()
   })
 }
 module.exports = run

@@ -23,14 +23,18 @@
       <canvas v-show="outputType === 'canvas'" ref="canvas">
         您的浏览器不支持canvas
       </canvas>
-      <pre v-show="outputType === 'html'" class="html-result-box" v-html="asciiHtml"></pre>
+      <pre v-show="outputType === 'html'" class="html-result-box" v-text="asciiHtml"></pre>
     </div>
   </div>
 </template>
 
 <script>
-const DEFAULT_AVAILABLE_TEXTS = '@#&$%863!i1uazvno~;*^+-. '
+const DEFAULT_AVAILABLE_TEXTS = '@#&$%863!i1uazvno~;*^+-—. ' // 默认字符集
 const MAX_COLOR_PIXELS = 255
+let activeText = '' // 当前字符集
+const SWEEP_INTERVAL = 6 // 原图像取点扫描间隔
+const GAP_X = 1 // 字符间隔
+const GAP_Y = 4 // 字符间隔
 
 function getBase64(img) {
   const reader = new FileReader()
@@ -58,12 +62,13 @@ function rgbToGray(r, g, b) {
  * @returns {string}
  */
 function grayToText(gray, texts = DEFAULT_AVAILABLE_TEXTS) {
-  const grayGap = MAX_COLOR_PIXELS / texts.length
+  activeText = texts
+  const grayGap = MAX_COLOR_PIXELS / activeText.length
   let textIndex = (gray / grayGap) >> 0
-  if (textIndex >= texts.length) {
-    textIndex = texts.length - 1
+  if (textIndex >= activeText.length) {
+    textIndex = activeText.length - 1
   }
-  return texts[textIndex]
+  return activeText[textIndex]
 }
 
 export default {
@@ -98,11 +103,11 @@ export default {
       this.ctx = this.canvas.getContext('2d')
     },
     drawCanvas(imgElement) {
+      const FONT_SIZE = this.ctx.measureText([0]).width // 字体的真是宽度
       const width = imgElement.width
       const height = imgElement.height
-      const minWidth = width >= 900 ? width : 900
-      const minHeight = height >= 900 ? height : 900
-      const scale = Math.max(minWidth / width, minHeight / height)
+      const minSize = Math.min(Math.max(width, height, 900), 1200)
+      const scale = Math.max(minSize / width, minSize / height)
       this.canvas.width = width * scale
       this.canvas.height = height * scale
       this.ctx.drawImage(imgElement, 0, 0, width, height, 0, 0, this.canvas.width, this.canvas.height)
@@ -112,22 +117,27 @@ export default {
       const imgDataHeight = imgData.height
       this.ctx.clearRect(0, 0, imgDataWidth, imgDataHeight)
       this.asciiHtml = ''
-      for (let h = 0; h < imgDataHeight; h += 12) {
+      let w, h, x, y
+      this.canvas.width = (imgDataWidth / SWEEP_INTERVAL + 1) * (FONT_SIZE + GAP_X)
+      this.canvas.height = (imgDataHeight / SWEEP_INTERVAL + 1) * (FONT_SIZE + GAP_Y)
+      this.ctx.font = '12px/1 "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace'
+      for (h = 0, y = FONT_SIZE + GAP_Y; h < imgDataHeight; h += SWEEP_INTERVAL, y += FONT_SIZE + GAP_Y) {
         let p = ''
-        for (let w = 0; w < imgDataWidth; w += 6) {
+        for (w = 0, x = 0; w < imgDataWidth; w += SWEEP_INTERVAL, x += FONT_SIZE + GAP_X) {
           const index = (w + imgDataWidth * h) * 4
           const r = imgDataArr[index]
           const g = imgDataArr[index + 1]
           const b = imgDataArr[index + 2]
           const text = grayToText(rgbToGray(r, g, b))
-          this.ctx.fillText(text, w, h + 8)
+          this.ctx.fillText(text, x, y)
           p += text
         }
         p += '\n'
         this.asciiHtml += p
       }
     },
-    getImgByUrl(url) {
+    getImgByUrl(url, texts = DEFAULT_AVAILABLE_TEXTS) {
+      activeText = texts
       const img = new Image()
       img.src = url
       img.addEventListener('load', () => {
@@ -183,8 +193,6 @@ export default {
     .html-result-box {
       line-height: 1;
       overflow: visible;
-      margin-top: 20px;
-      letter-spacing: 1px;
       font-size: 12px;
       padding: 0 20px;
     }

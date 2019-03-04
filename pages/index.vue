@@ -1,5 +1,5 @@
 <template>
-  <div class="my-main-page" v-html="textDom"></div>
+  <div v-safe-html="textDom" class="my-main-page"></div>
 </template>
 
 <script>

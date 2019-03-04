@@ -24,7 +24,8 @@
     "nuxt": "^2.4.0",
     "puppeteer-core": "^1.12.2",
     "socket.io-client": "^2.2.0",
-    "vuebar": "^0.0.20"
+    "vuebar": "^0.0.20",
+    "xss": "^1.0.3"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",

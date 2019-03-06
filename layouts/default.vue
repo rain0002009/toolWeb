@@ -66,15 +66,37 @@
 </style>
 
 <script>
+import anime from 'animejs'
+
 export default {
   data() {
     return {
+      emojiIndex: 0,
+      emoji: ['🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛'],
       menus: [{ name: '影视搜索', link: '/film' }, { name: '图片转字符画', link: '/pic2ascii' }]
     }
   },
   computed: {
     selected() {
       return [this.$route.path]
+    }
+  },
+  mounted() {
+    this.animationTitle()
+  },
+  methods: {
+    animationTitle() {
+      const originalTitle = document.title
+      anime({
+        targets: this,
+        loop: true,
+        emojiIndex: [0, this.emoji.length - 1],
+        duration: 3000,
+        easing: 'linear',
+        update: () => {
+          document.title = this.emoji[~~this.emojiIndex] + originalTitle
+        }
+      })
     }
   }
 }

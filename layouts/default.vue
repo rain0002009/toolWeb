@@ -71,8 +71,7 @@ import anime from 'animejs'
 export default {
   data() {
     return {
-      emojiIndex: 0,
-      emoji: ['🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛'],
+      emoji: { data: ['🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛'], index: 0 },
       menus: [{ name: '影视搜索', link: '/film' }, { name: '图片转字符画', link: '/pic2ascii' }]
     }
   },
@@ -88,13 +87,13 @@ export default {
     animationTitle() {
       const originalTitle = document.title
       anime({
-        targets: this,
+        targets: this.emoji,
         loop: true,
-        emojiIndex: [0, this.emoji.length - 1],
+        index: [0, this.emoji.data.length - 1],
         duration: 3000,
         easing: 'linear',
         update: () => {
-          document.title = this.emoji[~~this.emojiIndex] + originalTitle
+          document.title = this.emoji.data[~~this.emoji.index] + originalTitle
         }
       })
     }

@@ -1,6 +1,6 @@
 <template>
   <div class="pic-ascii">
-    <a-form class="img-input" :form="form" @submit="handleSubmit">
+    <a-form class="img-input" :form="form" layout="inline" @submit="handleSubmit">
       <a-form-item>
         <a-input v-decorator="['imgUrl', {rules: [{type: 'url'}]}]">
           <a-upload slot="prefix" class="avatar-uploader" :show-upload-list="false" @change="handleChange">
@@ -8,8 +8,16 @@
           </a-upload>
         </a-input>
       </a-form-item>
+      <a-form-item>
+        <a-button html-type="submit">
+          GO
+        </a-button>
+      </a-form-item>
     </a-form>
+
     <div class="control-box">
+      <span>需要颜色</span>
+      <a-switch v-model="needColor" />
       <a-radio-group v-model="outputType" default-value="canvas" button-style="solid">
         <a-radio-button value="canvas">
           canvas
@@ -18,12 +26,17 @@
           html
         </a-radio-button>
       </a-radio-group>
+
+      <div class="slider-box">
+        <span>扫描精度(越小精度越高)</span>
+        <a-slider v-model="sweepInterval" :max="40" :min="4" />
+      </div>
     </div>
     <div class="ascii-box">
       <canvas v-show="outputType === 'canvas'" ref="canvas">
         您的浏览器不支持canvas
       </canvas>
-      <pre v-show="outputType === 'html'" class="html-result-box" v-text="asciiHtml"></pre>
+      <pre v-show="outputType === 'html'" v-safe-html="asciiHtml" class="html-result-box"></pre>
     </div>
   </div>
 </template>
@@ -32,7 +45,6 @@
 const DEFAULT_AVAILABLE_TEXTS = '@#&$%863!i1uazvno~;*^+-—. ' // 默认字符集
 const MAX_COLOR_PIXELS = 255
 let activeText = '' // 当前字符集
-const SWEEP_INTERVAL = 6 // 原图像取点扫描间隔
 const GAP_X = 1 // 字符间隔
 const GAP_Y = 4 // 字符间隔
 
@@ -76,6 +88,8 @@ export default {
   components: {},
   data() {
     return {
+      sweepInterval: 12,
+      needColor: false,
       form: this.$form.createForm(this),
       ctx: null,
       outputType: 'canvas',
@@ -103,7 +117,8 @@ export default {
       this.ctx = this.canvas.getContext('2d')
     },
     drawCanvas(imgElement) {
-      const FONT_SIZE = this.ctx.measureText([0]).width // 字体的真是宽度
+      const SWEEP_INTERVAL = this.sweepInterval
+      const FONT_SIZE = this.ctx.measureText([0]).width // 字体的真实宽度
       const width = imgElement.width
       const height = imgElement.height
       const minSize = Math.min(Math.max(width, height, 900), 1200)
@@ -129,23 +144,23 @@ export default {
           const g = imgDataArr[index + 1]
           const b = imgDataArr[index + 2]
           const text = grayToText(rgbToGray(r, g, b))
+          this.needColor && (this.ctx.fillStyle = '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1))
           this.ctx.fillText(text, x, y)
-          p += text
+          p += this.needColor ? `<span style="color: rgb(${r},${g},${b})">${text}</span>` : text
         }
         p += '\n'
         this.asciiHtml += p
       }
     },
     getImgByUrl(url, texts = DEFAULT_AVAILABLE_TEXTS) {
+      if (!url.match('data:image/')) {
+        return this.$socket.emit('get img', url, res => this.getImgByUrl(res))
+      }
       activeText = texts
       const img = new Image()
       img.src = url
       img.addEventListener('load', () => {
-        if (url.match('data:image/')) {
-          this.drawCanvas(img)
-        } else {
-          this.$socket.emit('get img', url, res => this.getImgByUrl(res))
-        }
+        this.drawCanvas(img)
       })
     },
     async handleChange(info) {
@@ -161,12 +176,12 @@ export default {
 <style lang="scss">
   .pic-ascii {
     .img-input {
+      text-align: center;
       margin-top: 50px;
-      display: flex;
-      justify-content: center;
+      margin-bottom: 20px;
 
       .ant-form-item {
-        width: 40%;
+        margin-right: 0;
       }
     }
 
@@ -188,6 +203,11 @@ export default {
       canvas {
         display: block;
       }
+    }
+
+    .slider-box {
+      margin-top: 20px;
+      padding: 0 40%;
     }
 
     .html-result-box {

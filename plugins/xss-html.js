@@ -2,7 +2,7 @@ import Vue from 'vue'
 import xss from 'xss'
 
 const whiteList = {
-  span: ['class'],
+  span: ['class', 'style'],
   div: ['class'],
   a: ['class']
 }

@@ -72,7 +72,11 @@ export default {
   data() {
     return {
       emoji: { data: ['🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛'], index: 0 },
-      menus: [{ name: '影视搜索', link: '/film' }, { name: '图片转字符画', link: '/pic2ascii' }]
+      menus: [
+        { name: '影视搜索', link: '/film' },
+        { name: '图片转字符画', link: '/pic2ascii' },
+        { name: '五子棋', link: '/gobang' }
+      ]
     }
   },
   computed: {

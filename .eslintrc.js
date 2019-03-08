@@ -13,6 +13,7 @@ module.exports = {
   // add your custom rules here
   rules: {
     'no-console': 1,
-    'no-new-func': 0
+    'no-new-func': 0,
+    'vue/html-self-closing': 0
   }
 }

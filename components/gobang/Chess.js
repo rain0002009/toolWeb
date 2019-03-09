@@ -10,11 +10,11 @@ export const GOBANG_PADDING = 30 // 棋盘的padding
 export const CHESS_SIZE = 8 // 棋子大小
 export const MAX_BOUNDARY = SIZE * CHESSBOARD_SIZE - HALF_CHESSBOARD_SIZE
 export const keyMap = ['垂直', '水平', '反斜线', '正斜线']
+
 export class Chess {
   static chessInstance = {}
   static chessFamily = {}
   static activeInstance = [[], [], [], [], [], [], [], []]
-  static gameEndCallback
 
   constructor(x, y, colorName) {
     this.x = x
@@ -60,16 +60,10 @@ export class Chess {
             Chess.chessFamily[key[0]] = 2
           }
           const familyLength = Chess.chessFamily[instance.family[type][0]]
-          if (familyLength >= 3) {
-            const p1 = Chess.findEmpty(instance, i)
-            const p2 = Chess.findEmpty(instance, i >= 4 ? i - 4 : i + 4)
-            const priorityLevel = instance.color !== AI.color ? familyLength + 1 : familyLength
-            p1 && AI.criticalArray.push({ priorityLevel, ...p1 })
-            p2 && AI.criticalArray.push({ priorityLevel, ...p2 })
-          }
+          AI.addCriticalArray(instance, familyLength, i)
           if (familyLength >= 5) {
             Game.isEnd = true
-            Chess.gameEndCallback(instance)
+            Game.gameEndCallback(instance)
           }
         }
       } else {

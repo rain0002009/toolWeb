@@ -6,9 +6,10 @@ export default class Game {
   static ai
   static box
   static isEnd = false
+  static gameEndCallback
 
   constructor(playerColor, aiColor, box, gameEndCallback) {
-    Chess.gameEndCallback = gameEndCallback
+    Game.gameEndCallback = gameEndCallback
     Game.box = box
     this.player = new Player(playerColor)
     Game.ai = new AI(aiColor)

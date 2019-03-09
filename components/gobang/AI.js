@@ -10,6 +10,16 @@ export default class AI {
     AI.color = this.color = color
   }
 
+  static addCriticalArray(instance, familyLength, i) {
+    if (familyLength >= 3) {
+      const p1 = Chess.findEmpty(instance, i)
+      const p2 = Chess.findEmpty(instance, i >= 4 ? i - 4 : i + 4)
+      const priorityLevel = instance.color !== AI.color ? familyLength + 1 : familyLength
+      p1 && AI.criticalArray.push({ priorityLevel, ...p1 })
+      p2 && AI.criticalArray.push({ priorityLevel, ...p2 })
+    }
+  }
+
   run() {
     if (Game.isEnd) return false
     AI.criticalArray.sort(function (a, b) {

@@ -32,6 +32,10 @@ export class Chess {
     Chess.chessInstance['' + x + y] = this
   }
 
+  /**
+   * 检测8个方向上棋子是否相连
+   * @param instance
+   */
   static addFamily(instance) {
     for (let i = 0; i < 8; i++) {
       const type = i >= 4 ? i - 4 : i
@@ -61,10 +65,12 @@ export class Chess {
           }
           const familyLength = Chess.chessFamily[instance.family[type][0]]
           AI.addCriticalArray(instance, familyLength, i)
+          // 游戏结束 平局
           if (familyLength === SIZE * SIZE) {
             Game.isEnd = true
             Game.gameEndCallback(null)
           }
+          // 游戏结束
           if (familyLength >= 5) {
             Game.isEnd = true
             Game.gameEndCallback(instance)
@@ -99,10 +105,21 @@ export class Chess {
     }
   }
 
+  /**
+   * 检查棋子是否超出棋盘
+   * @param instance
+   * @returns {boolean}
+   */
   static beyondBoundary(instance) {
     return instance.x <= 0 || instance.x >= MAX_BOUNDARY || instance.y <= 0 || instance.y >= MAX_BOUNDARY
   }
 
+  /**
+   * 查找棋子的端点是否有空位
+   * @param instance
+   * @param direction
+   * @returns {*}
+   */
   static findEmpty(instance, direction) {
     let output
     let step = 1
@@ -123,6 +140,13 @@ export class Chess {
     return output
   }
 
+  /**
+   * 查找相邻棋子
+   * @param instance
+   * @param direction
+   * @param step
+   * @returns {{instance: *, x: number, y: number}}
+   */
   static findChess(instance, direction, step = 1) {
     let x, y
     const instanceStep = CHESSBOARD_SIZE * step
@@ -166,6 +190,12 @@ export class Chess {
     }
   }
 
+  /**
+   * 检查棋子是否已创建
+   * @param x
+   * @param y
+   * @returns {boolean}
+   */
   static has(x, y) {
     return !!Chess.chessInstance['' + x + y]
   }

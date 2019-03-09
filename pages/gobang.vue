@@ -17,6 +17,7 @@ const GOBANG_SIZE = CHESSBOARD_SIZE * SIZE // 棋盘大小
 const HALF_CHESSBOARD_SIZE = CHESSBOARD_SIZE / 2
 const GOBANG_PADDING = 30 // 棋盘的padding
 const CHESS_SIZE = 8 // 棋子大小
+const MAX_BOUNDARY = SIZE * CHESSBOARD_SIZE - HALF_CHESSBOARD_SIZE
 const keyMap = ['垂直', '水平', '反斜线', '正斜线']
 
 class Game {
@@ -37,7 +38,7 @@ class Game {
     Chess.chessFamily = {}
     Chess.activeInstance = [[], [], [], [], [], [], [], []]
     while (this.box.firstChild) {
-      this.box.removeChild(this.box.firstChild)
+      Game.box.removeChild(this.box.firstChild)
     }
   }
 }
@@ -91,39 +92,70 @@ class Chess {
             const key = instance.family[type] = foundInstance.family[type] = [Symbol(keyMap[type])]
             Chess.chessFamily[key[0]] = 2
           }
-          if (Chess.chessFamily[instance.family[type][0]] >= 5) {
+          const familyLength = Chess.chessFamily[instance.family[type][0]]
+          if (familyLength >= 3) {
+            const p1 = Chess.findEmpty(instance, i)
+            const p2 = Chess.findEmpty(instance, i >= 4 ? i - 4 : i + 4)
+            const priorityLevel = instance.color !== AI.color ? familyLength + 1 : familyLength
+            p1 && AI.criticalArray.push({ priorityLevel, ...p1 })
+            p2 && AI.criticalArray.push({ priorityLevel, ...p2 })
+          }
+          if (familyLength >= 5) {
             Game.isEnd = true
             Chess.gameEndCallback(instance)
           }
         }
       } else {
-        const MAX_BOUNDARY = SIZE * CHESSBOARD_SIZE - HALF_CHESSBOARD_SIZE
-        const inconformity = new Set()
+        const incongruity = new Set()
         if (instance.x <= 0) {
-          inconformity.add(5)
-          inconformity.add(6)
-          inconformity.add(7)
+          incongruity.add(5)
+          incongruity.add(6)
+          incongruity.add(7)
         }
         if (instance.y <= 0) {
-          inconformity.add(0)
-          inconformity.add(1)
-          inconformity.add(7)
+          incongruity.add(0)
+          incongruity.add(1)
+          incongruity.add(7)
         }
         if (instance.x >= MAX_BOUNDARY) {
-          inconformity.add(1)
-          inconformity.add(2)
-          inconformity.add(3)
+          incongruity.add(1)
+          incongruity.add(2)
+          incongruity.add(3)
         }
         if (instance.y >= MAX_BOUNDARY) {
-          inconformity.add(3)
-          inconformity.add(4)
-          inconformity.add(5)
+          incongruity.add(3)
+          incongruity.add(4)
+          incongruity.add(5)
         }
-        if (!inconformity.has(i)) {
+        if (!incongruity.has(i)) {
           Chess.activeInstance[i].push(instance)
         }
       }
     }
+  }
+
+  static beyondBoundary(instance) {
+    return instance.x <= 0 || instance.x >= MAX_BOUNDARY || instance.y <= 0 || instance.y >= MAX_BOUNDARY
+  }
+
+  static findEmpty(instance, direction) {
+    let output
+    let step = 1
+    while (output === undefined) {
+      const foundInstance = Chess.findChess(instance, direction, step)
+      if (Chess.beyondBoundary(foundInstance)) {
+        output = null
+      } else if (foundInstance.instance) {
+        if (foundInstance.instance.color === instance.color) {
+          step++
+        } else {
+          output = null
+        }
+      } else {
+        output = foundInstance
+      }
+    }
+    return output
   }
 
   static findChess(instance, direction, step = 1) {
@@ -180,20 +212,35 @@ class Player {
   }
 
   run(closeX, closeY) {
+    if (Game.isEnd) return false
     if (!Chess.has(closeX, closeY)) {
       const chess = new Chess(closeX, closeY, this.color)
       Chess.addFamily(chess)
-      !Game.isEnd && Game.ai.run()
+      Game.ai.run()
     }
   }
 }
 
 class AI {
+  static criticalArray = []
+  static color
+
   constructor(color) {
-    this.color = color
+    AI.color = this.color = color
   }
 
   run() {
+    if (Game.isEnd) return false
+    AI.criticalArray.sort(function (a, b) {
+      return a.priorityLevel < b.priorityLevel
+    })
+    while (AI.criticalArray.length) {
+      const point = AI.criticalArray.pop()
+      if (!Chess.has(point.x, point.y)) {
+        const aiInstance = new Chess(point.x, point.y, this.color)
+        return Chess.addFamily(aiInstance)
+      }
+    }
     const activeIndexArray = []
     _.forEach(Chess.activeInstance, (item, index) => {
       if (!_.isEmpty(item)) {

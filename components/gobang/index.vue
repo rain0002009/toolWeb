@@ -37,6 +37,9 @@ export default {
     this.startGame()
   },
   methods: {
+    restart() {
+      this.game.restart()
+    },
     startGame() {
       this.game = new Game('black', 'white', this.boardBox, (instance) => {
         this.$message.info(instance.color + ' win')

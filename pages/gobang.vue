@@ -1,6 +1,6 @@
 <template>
   <div>
-    <gobang ref="gobang"></gobang>
+    <gobang ref="gobang" :game-end-callback="gameEndCallback"></gobang>
     <a-button @click="restartGame">
       重新开始
     </a-button>
@@ -22,6 +22,13 @@ export default {
     }
   },
   methods: {
+    gameEndCallback(instance) {
+      if (instance) {
+        this.$message.info(`${instance.color} win`)
+      } else {
+        this.$message.info('平局')
+      }
+    },
     restartGame() {
       this.gobang.restart()
     }

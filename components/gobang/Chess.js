@@ -61,6 +61,10 @@ export class Chess {
           }
           const familyLength = Chess.chessFamily[instance.family[type][0]]
           AI.addCriticalArray(instance, familyLength, i)
+          if (familyLength === SIZE * SIZE) {
+            Game.isEnd = true
+            Game.gameEndCallback(null)
+          }
           if (familyLength >= 5) {
             Game.isEnd = true
             Game.gameEndCallback(instance)

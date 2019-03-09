@@ -9,11 +9,20 @@
 </template>
 
 <script>
-import { SIZE, GOBANG_PADDING, GOBANG_SIZE, HALF_CHESSBOARD_SIZE, CHESSBOARD_SIZE, Chess } from './Chess'
+import { SIZE, GOBANG_PADDING, GOBANG_SIZE, HALF_CHESSBOARD_SIZE, CHESSBOARD_SIZE } from './Chess'
 import Game from './Game'
 
 export default {
   name: 'GoBang',
+  props: {
+    gameEndCallback: {
+      type: Function,
+      default() {
+        return () => {
+        }
+      }
+    }
+  },
   data() {
     return {
       GOBANG_PADDING,
@@ -33,7 +42,6 @@ export default {
     }
   },
   mounted() {
-    window.Chess = Chess
     this.startGame()
   },
   methods: {
@@ -41,9 +49,7 @@ export default {
       this.game.restart()
     },
     startGame() {
-      this.game = new Game('black', 'white', this.boardBox, (instance) => {
-        this.$message.info(instance.color + ' win')
-      })
+      this.game = new Game('black', 'white', this.boardBox, this.gameEndCallback)
     },
     createChess(e) {
       let x = e.clientX - this.gobangBoundingClientRect.left - GOBANG_PADDING

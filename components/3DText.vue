@@ -30,11 +30,10 @@ class Vector3 {
     this.z = z
   }
 
-  static fromScreenCoords(_x, _y, _z) {
+  static fromScreenCoords(_x, _y, z = 0) {
     const factor = fov / viewDistance
     const x = (_x - canvas.width / 2) / factor
     const y = (_y - canvas.height / 2) / factor
-    const z = _z !== undefined ? _z : 0
 
     return new Vector3(x, y, z)
   }

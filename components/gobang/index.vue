@@ -101,6 +101,16 @@ export default {
       }
     }
 
+    .focal-point {
+      @extend .white;
+
+      .inner-ball {
+        background-color: rgba(red, .7);
+        border: 1px solid;
+        z-index: 1;
+      }
+    }
+
     .row {
       display: flex;
       position: relative;

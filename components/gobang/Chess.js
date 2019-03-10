@@ -32,6 +32,14 @@ export class Chess {
     Chess.chessInstance['' + x + y] = this
   }
 
+  static draw(point) {
+    const el = document.createElement('div')
+    el.innerHTML = `<span class="inner-ball" style="width: ${CHESS_SIZE}px;height: ${CHESS_SIZE}px;"></span>`
+    el.style.cssText = `left: ${point.x}px; top: ${point.y}px; width: ${CHESSBOARD_SIZE}px; height: ${CHESSBOARD_SIZE}px`
+    el.classList.add('focal-point')
+    Game.box.appendChild(el)
+  }
+
   /**
    * 检测8个方向上棋子是否相连
    * @param instance
@@ -64,7 +72,6 @@ export class Chess {
             Chess.chessFamily[key[0]] = 2
           }
           const familyLength = Chess.chessFamily[instance.family[type][0]]
-          AI.addCriticalArray(instance, familyLength, i)
           // 游戏结束 平局
           if (familyLength === SIZE * SIZE) {
             Game.isEnd = true
@@ -103,6 +110,7 @@ export class Chess {
         }
       }
     }
+    AI.addCriticalArray(instance)
   }
 
   /**
@@ -184,6 +192,7 @@ export class Chess {
         y = (instance.y - instanceStep)
     }
     return {
+      direction,
       instance: Chess.chessInstance['' + x + y],
       x,
       y

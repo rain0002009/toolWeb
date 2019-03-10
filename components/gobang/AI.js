@@ -10,20 +10,30 @@ export default class AI {
     AI.color = this.color = color
   }
 
-  static addCriticalArray(instance, familyLength, i) {
-    if (familyLength >= 3) {
-      const p1 = Chess.findEmpty(instance, i)
-      const p2 = Chess.findEmpty(instance, i >= 4 ? i - 4 : i + 4)
-      const priorityLevel = instance.color !== AI.color ? familyLength + 1 : familyLength
-      p1 && AI.criticalArray.push({ priorityLevel, ...p1 })
-      p2 && AI.criticalArray.push({ priorityLevel, ...p2 })
-    }
+  static addCriticalArray(instance) {
+    instance.family.forEach((item, type) => {
+      if (item) {
+        const familyLength = Chess.chessFamily[item[0]]
+        const oppositeDirection = type + 4
+        const p1 = Chess.findEmpty(instance, type)
+        const p2 = Chess.findEmpty(instance, oppositeDirection)
+        _.compact([p1, p2]).forEach((p) => {
+          let priorityLevel = familyLength >= 3 ? familyLength : 0
+          const nearInstance = Chess.findChess(p, p.direction).instance
+          if (nearInstance) {
+            priorityLevel = nearInstance.family[type] ? familyLength + 2 : familyLength + 1
+          }
+          priorityLevel *= 2
+          priorityLevel && AI.criticalArray.push({ priorityLevel, ...p })
+        })
+      }
+    })
   }
 
   run() {
     if (Game.isEnd) return false
     AI.criticalArray.sort(function (a, b) {
-      return a.priorityLevel < b.priorityLevel
+      return b.priorityLevel - a.priorityLevel
     })
     while (AI.criticalArray.length) {
       const point = AI.criticalArray.pop()

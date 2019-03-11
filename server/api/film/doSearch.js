@@ -36,7 +36,7 @@ const run = (socket) => {
     callback && callback()
   })
 
-  socket.on('test film rule', async (data, filmName, callback) => {
+  socket.on('test film rule', async (data, filmName) => {
     data.isTest = true
     const testBrowser = await puppeteer.launch({
       headless: false,
@@ -48,6 +48,7 @@ const run = (socket) => {
 
   socket.on('disconnect', async function () {
     browserBack && await browserBack.close()
+    browserBack = null
   })
 }
 module.exports = run

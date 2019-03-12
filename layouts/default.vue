@@ -10,9 +10,7 @@
       </a-menu>
     </a-layout-sider>
     <a-layout-content>
-      <vuescroll>
-        <nuxt />
-      </vuescroll>
+      <nuxt />
     </a-layout-content>
   </a-layout>
 </template>
@@ -69,10 +67,8 @@
 
 <script>
 import anime from 'animejs'
-import vuescroll from 'vuescroll'
 
 export default {
-  components: { vuescroll },
   data() {
     return {
       emoji: { data: ['🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛'], index: 0 },

@@ -10,7 +10,8 @@
       </a-menu>
     </a-layout-sider>
     <a-layout-content>
-      <nuxt />
+      <css-doodle v-safe-html="getBackground" class="css-doodle-background"></css-doodle>
+      <nuxt class="nuxt-child-body" />
     </a-layout-content>
   </a-layout>
 </template>
@@ -20,53 +21,33 @@
     height: 100%;
   }
 
-  .vb > .vb-dragger {
-    z-index: 5;
-    width: 12px;
+  .ant-layout-sider {
+    position: relative;
+    z-index: 2;
+  }
+
+  .css-doodle-background {
+    position: absolute;
+    left: 0;
     right: 0;
-  }
-
-  .vb > .vb-dragger > .vb-dragger-styler {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -webkit-transform: rotate3d(0, 0, 0, 0);
-    transform: rotate3d(0, 0, 0, 0);
-    -webkit-transition: background-color 100ms ease-out,
-    margin 100ms ease-out,
-    height 100ms ease-out;
-    transition: background-color 100ms ease-out,
-    margin 100ms ease-out,
-    height 100ms ease-out;
-    background-color: rgba(48, 121, 244, .1);
-    margin: 5px 5px 5px 0;
-    border-radius: 20px;
-    height: calc(100% - 10px);
-    display: block;
-  }
-
-  .vb.vb-scrolling-phantom > .vb-dragger > .vb-dragger-styler {
-    background-color: rgba(48, 121, 244, .3);
-  }
-
-  .vb > .vb-dragger:hover > .vb-dragger-styler {
-    background-color: rgba(48, 121, 244, .5);
-    margin: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    width: 100%;
     height: 100%;
+    overflow: hidden;
   }
 
-  .vb.vb-dragging > .vb-dragger > .vb-dragger-styler {
-    background-color: rgba(48, 121, 244, .5);
-    margin: 0;
-    height: 100%;
-  }
-
-  .vb.vb-dragging-phantom > .vb-dragger > .vb-dragger-styler {
-    background-color: rgba(48, 121, 244, .5);
+  .nuxt-child-body {
+    position: relative;
+    z-index: 2;
   }
 </style>
 
 <script>
+import 'css-doodle'
 import anime from 'animejs'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -75,11 +56,15 @@ export default {
       menus: [
         { name: '影视搜索', link: '/film' },
         { name: '图片转字符画', link: '/pic2ascii' },
-        { name: '五子棋', link: '/gobang' }
+        { name: '五子棋', link: '/gobang' },
+        { name: '设置', link: '/settings' }
       ]
     }
   },
   computed: {
+    ...mapGetters({
+      getBackground: 'settings/getBackground'
+    }),
     selected() {
       return [this.$route.path]
     }

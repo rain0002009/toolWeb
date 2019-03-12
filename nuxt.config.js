@@ -36,7 +36,8 @@ module.exports = {
   plugins: [
     '@/plugins/antd-ui',
     '@/plugins/io',
-    '@/plugins/xss-html'
+    '@/plugins/xss-html',
+    '@/plugins/vueScroll'
   ],
 
   /*

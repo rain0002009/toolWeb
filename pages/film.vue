@@ -17,7 +17,9 @@
         </a-button>
       </div>
     </div>
-    <nuxt-child />
+    <vue-scroll>
+      <nuxt-child />
+    </vue-scroll>
 
     <a-modal
       title="添加源"

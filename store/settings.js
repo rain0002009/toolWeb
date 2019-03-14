@@ -1,8 +1,19 @@
 import store from 'store2'
 
 export const state = () => ({
-  background: `
-        :doodle {
+  background: ''
+})
+
+export const mutations = {
+  setBackground(state, background) {
+    store.set('background', background)
+    state.background = background
+  }
+}
+
+export const getters = {
+  getBackground: (state) => {
+    return state.background ? state.background : store.has('background') ? store.get('background') : `:doodle {
         @grid: 50x1 / 50vmin;
         perspective: 23vmin;
         }
@@ -39,18 +50,6 @@ export const state = () => ({
         opacity: 0;
         transform: translate3d(0, 0, 1vmin);
         }
-        }
-      `
-})
-
-export const mutations = {
-  setBackground(state, background) {
-    store.set('background', background)
-  }
-}
-
-export const getters = {
-  getBackground: (state) => {
-    return store.has('background') ? store.get('background') : state.background
+        }`
   }
 }

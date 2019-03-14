@@ -10,7 +10,9 @@
       </a-menu>
     </a-layout-sider>
     <a-layout-content>
-      <css-doodle v-safe-html="getBackground" class="css-doodle-background"></css-doodle>
+      <div class="css-doodle-container">
+        <css-doodle ref="cssDoodle" v-safe-html="getBackground" class="css-doodle-background"></css-doodle>
+      </div>
       <nuxt class="nuxt-child-body" />
     </a-layout-content>
   </a-layout>
@@ -26,16 +28,19 @@
     z-index: 2;
   }
 
-  .css-doodle-background {
+  .css-doodle-container {
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     z-index: 0;
-    width: 100%;
-    height: 100%;
     overflow: hidden;
+  }
+
+  .css-doodle-background {
+    width: 100vmax;
+    height: 100vmax;
   }
 
   .nuxt-child-body {
@@ -67,6 +72,13 @@ export default {
     }),
     selected() {
       return [this.$route.path]
+    }
+  },
+  watch: {
+    getBackground() {
+      setTimeout(() => {
+        this.$refs.cssDoodle.update()
+      }, 0)
     }
   },
   mounted() {

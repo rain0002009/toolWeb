@@ -5,7 +5,7 @@
         v-model="background"
         size="large"
         :rows="5"
-        placeholder="如：return page.$eval('#counts', el => +el.innerText)"
+        placeholder="访问 https://css-doodle.com 获取更多信息"
       ></a-textarea>
     </a-form-item>
     <p>提示: 本站采用css-doodle <a href="https://css-doodle.com/">https://css-doodle.com/</a></p>

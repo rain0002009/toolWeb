@@ -1,19 +1,25 @@
 import store from 'store2'
+import _ from 'lodash'
 
 export const state = () => ({
-  background: ''
+  background: {
+    enable: false,
+    data: ''
+  }
 })
 
 export const mutations = {
   setBackground(state, background) {
     store.set('background', background)
-    state.background = background
+    _.assign(state.background, background)
   }
 }
 
 export const getters = {
   getBackground: (state) => {
-    return state.background ? state.background : store.has('background') ? store.get('background') : `:doodle {
+    return state.background.data ? state.background : store.has('background') ? store.get('background') : {
+      enable: false,
+      data: `:doodle {
         @grid: 50x1 / 50vmin;
         perspective: 23vmin;
         }
@@ -51,5 +57,6 @@ export const getters = {
         transform: translate3d(0, 0, 1vmin);
         }
         }`
+    }
   }
 }

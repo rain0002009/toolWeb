@@ -10,8 +10,8 @@
       </a-menu>
     </a-layout-sider>
     <a-layout-content>
-      <div class="css-doodle-container">
-        <css-doodle ref="cssDoodle" v-safe-html="getBackground" class="css-doodle-background"></css-doodle>
+      <div v-if="getBackground.enable" class="css-doodle-container">
+        <css-doodle ref="cssDoodle" v-safe-html="getBackground.data" class="css-doodle-background"></css-doodle>
       </div>
       <nuxt class="nuxt-child-body" />
     </a-layout-content>
@@ -62,6 +62,7 @@ export default {
         { name: '影视搜索', link: '/film' },
         { name: '图片转字符画', link: '/pic2ascii' },
         { name: '五子棋', link: '/gobang' },
+        { name: '音乐可视化', link: '/audio' },
         { name: '设置', link: '/settings' }
       ]
     }
@@ -77,7 +78,7 @@ export default {
   watch: {
     getBackground() {
       setTimeout(() => {
-        this.$refs.cssDoodle.update()
+        this.$refs.cssDoodle && this.$refs.cssDoodle.update()
       }, 0)
     }
   },

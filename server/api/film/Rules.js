@@ -9,21 +9,25 @@ const FileSync = require('lowdb/adapters/FileSync')
 const adapter = new FileSync('./db.json')
 const db = low(adapter)
 db.defaults({ filmRuleList: {} }).write()
-const ruleList = db.get('filmRuleList').value()
+const ruleList = db.get('filmRuleList')
 const rules = {}
-_.forEach(ruleList, function (value) {
+_.forEach(ruleList.value(), function (value) {
   rules[value.url] = createCallback(value)
 })
 
 function addFilm(data) {
-  db.get('filmRuleList').push(data).write()
+  ruleList.push(data).write()
   rules[data.url] = createCallback(data)
 }
 
+function deleteFilm(url) {
+  const item = ruleList.find(['url', url]).value()
+  db.get('filmRuleList').remove(item).write()
+}
+
 function editFilm(data) {
-  consola.log(data)
   const key = data.url
-  db.get('filmRuleList').find(['url', key]).assign(data).write()
+  ruleList.find(['url', key]).assign(data).write()
   rules[key] = createCallback(data)
 }
 
@@ -72,6 +76,7 @@ function createCallback({ needHost, type = 'html', ajaxType = 'post', isTest = f
 
 exports.addFilm = addFilm
 exports.editFilm = editFilm
+exports.deleteFilm = deleteFilm
 exports.rules = rules
-exports.ruleList = ruleList
+exports.ruleList = ruleList.value()
 exports.createCallback = createCallback

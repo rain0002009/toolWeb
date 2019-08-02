@@ -126,6 +126,9 @@
     </a-form-item>
 
     <div style="text-align:right;padding-right: 25%">
+      <a-button @click="deleteFilm">
+        删除
+      </a-button>
       <a-button @click="testRule">
         测试
       </a-button>
@@ -198,6 +201,11 @@ export default {
             this.$emit('submit-success')
           })
         }
+      })
+    },
+    deleteFilm() {
+      this.$socket.emit('remove file', this.form.getFieldsValue().url, () => {
+        this.$message.success('删除成功')
       })
     }
   }

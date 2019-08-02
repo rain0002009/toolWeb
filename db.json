@@ -1,15 +1,6 @@
 {
   "filmRuleList": [
     {
-      "url": "http://www.863hd.com/index.php?m=vod-search",
-      "needHost": true,
-      "type": "ajax",
-      "filmListQuery": ".movie-item-in",
-      "linkQuery": "a",
-      "titleQuery": ".meta a",
-      "hasResCheck": "return page.$eval('#counts', el => +el.innerText)"
-    },
-    {
       "url": "http://zhannei.baidu.com/cse/search",
       "filmListQuery": "#results",
       "q": "?q=#keyWord#&click=1&s=7275932658900104615",
@@ -85,7 +76,10 @@
       "hasResCheck": "return page.$('#contents li')",
       "filmListQuery": "#contents > li",
       "linkQuery": ".play-pic",
-      "titleQuery": "p a"
+      "titleQuery": "p a",
+      "charset": "utf8",
+      "ajaxType": "post",
+      "needFilter": true
     },
     {
       "url": "http://www.177dy.com/search",

@@ -22,6 +22,8 @@ export default {
     getAudio() {
       this.$socket.emit('get audio', AUDIO_URL, (res) => {
         player.decodeAudio(res)
+      }, (error) => {
+        this.$message.error(error)
       })
       player.ready(() => {
         player.play()

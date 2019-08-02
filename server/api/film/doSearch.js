@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer-core')
 const _ = require('lodash')
 const pkg = require('../../../package.json')
-const { rules, addFilm, editFilm, ruleList, createCallback } = require('./Rules')
+const { rules, addFilm, editFilm, deleteFilm, ruleList, createCallback } = require('./Rules')
 
 function handleBack(liNode, socket, percent) {
   percent.done++
@@ -26,6 +26,12 @@ const run = (socket) => {
 
   socket.on('add film', (data, callback) => {
     addFilm(data)
+    socket.emit('get rules', ruleList)
+    callback && callback()
+  })
+
+  socket.on('remove file', (data, callback) => {
+    deleteFilm(data)
     socket.emit('get rules', ruleList)
     callback && callback()
   })

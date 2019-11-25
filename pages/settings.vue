@@ -1,7 +1,7 @@
 <template>
   <a-form class="page-setting" :form="form" @submit="handleSubmit">
     <a-form-item label="开启背景">
-      <a-switch v-model="background.enable"></a-switch>
+      <a-switch v-model="background.enable" />
     </a-form-item>
     <a-form-item label="网站背景">
       <a-textarea
@@ -9,7 +9,7 @@
         size="large"
         :rows="5"
         placeholder="访问 https://css-doodle.com 获取更多信息"
-      ></a-textarea>
+      />
     </a-form-item>
     <p>提示: 本站采用css-doodle <a href="https://css-doodle.com/">https://css-doodle.com/</a></p>
     <a-button html-type="submit">
@@ -18,43 +18,39 @@
   </a-form>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import _ from 'lodash'
 import { mapGetters, mapMutations } from 'vuex'
 
-export default {
-  name: 'WebSettings',
-  data() {
-    return {
-      form: this.$form.createForm(this),
-      background: {
-        enable: false,
-        data: ''
-      }
-    }
-  },
+@Component({
   computed: {
     ...mapGetters({
       getBackground: 'settings/getBackground'
     })
   },
-  watch: {
-    getBackground: {
-      deep: true,
-      immediate: true,
-      handler(value) {
-        _.assign(this.background, value)
-      }
-    }
-  },
   methods: {
     ...mapMutations({
       setBackground: 'settings/setBackground'
-    }),
-    handleSubmit(e) {
-      e && e.preventDefault()
-      this.setBackground(this.background)
-    }
+    })
+  }
+})
+export default class WebSettings extends Vue {
+  form = this.$form.createForm(this)
+  setBackground
+  background = {
+    enable: false,
+    data: ''
+  }
+
+  @Watch('getBackground', { deep: true, immediate: true })
+  onGetBackgroundChange (value) {
+    _.assign(this.background, value)
+  }
+
+  handleSubmit (e) {
+    e && e.preventDefault()
+    this.setBackground(this.background)
   }
 }
 </script>

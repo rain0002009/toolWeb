@@ -6,11 +6,11 @@ export default class AI {
   static criticalArray = []
   static color
 
-  constructor(color) {
+  constructor (color) {
     AI.color = this.color = color
   }
 
-  static addCriticalArray(instance) {
+  static addCriticalArray (instance) {
     instance.family.forEach((item, type) => {
       if (item) {
         const familyLength = Chess.chessFamily[item[0]]
@@ -30,8 +30,8 @@ export default class AI {
     })
   }
 
-  run() {
-    if (Game.isEnd) return false
+  run () {
+    if (Game.isEnd) { return false }
     AI.criticalArray.sort(function (a, b) {
       return b.priorityLevel - a.priorityLevel
     })

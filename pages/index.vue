@@ -1,6 +1,6 @@
 <template>
   <div class="my-main-page">
-    <AwesomeText text="欢迎"></AwesomeText>
+    <AwesomeText text="欢迎" />
   </div>
 </template>
 
@@ -12,15 +12,15 @@ export default {
   components: {
     AwesomeText: Text
   },
-  data() {
+  data () {
     return {}
   },
   computed: {
-    textDom() {
+    textDom () {
       return [...this.text].map(v => `<span class="ani-text">${v}</span>`).join('')
     }
   },
-  mounted() {},
+  mounted () {},
   methods: {}
 }
 </script>

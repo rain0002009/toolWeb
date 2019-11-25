@@ -40,7 +40,7 @@ export default {
   components: {
     FilmForm
   },
-  data() {
+  data () {
     return {
       searchText: '',
       addFilmVisible: false,
@@ -50,19 +50,19 @@ export default {
     }
   },
   computed: {
-    percent() {
+    percent () {
       return this.$store.state.film.percent
     }
   },
-  mounted() {
+  mounted () {
     this.searchText = this.$route.params.name || ''
   },
   methods: {
-    handleAddFilm() {
+    handleAddFilm () {
       this.$refs.form.handleSubmit()
     },
-    onSearch(filmName) {
-      if (!filmName) return false
+    onSearch (filmName) {
+      if (!filmName) { return false }
       this.$router.push({ name: 'film-name', params: { name: filmName } })
     }
   }

@@ -3,7 +3,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setPercent(state, percent) {
+  setPercent (state, percent) {
     state.percent = percent
   }
 }

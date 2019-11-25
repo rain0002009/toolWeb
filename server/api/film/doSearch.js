@@ -3,7 +3,7 @@ const _ = require('lodash')
 const pkg = require('../../../package.json')
 const { rules, addFilm, editFilm, deleteFilm, ruleList, createCallback } = require('./Rules')
 
-function handleBack(liNode, socket, percent) {
+function handleBack (liNode, socket, percent) {
   percent.done++
   socket.emit('get films', liNode, ~~(percent.done / percent.total * 100))
   return false

@@ -14,19 +14,19 @@ import FilmForm from '~/components/FilmForm'
 export default {
   name: 'FilmEdit',
   components: { FilmForm },
-  data() {
+  data () {
     return {
       list: []
     }
   },
   watch: {
-    '$route': 'getRule'
+    $route: 'getRule'
   },
-  mounted() {
+  mounted () {
     this.getRule()
   },
   methods: {
-    getRule() {
+    getRule () {
       const callback = (data) => {
         this.list = data || []
       }

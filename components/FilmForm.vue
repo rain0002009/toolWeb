@@ -139,75 +139,69 @@
   </a-form>
 </template>
 
-<script>
-export default {
-  name: 'FilmForm',
-  props: {
-    initialValue: {
-      type: Object,
-      default() {
-        return {
-          url: '',
-          type: 'html',
-          q: '',
-          hasResCheck: '',
-          needHost: false,
-          needFilter: false,
-          filmListQuery: '',
-          linkQuery: '',
-          titleQuery: ''
+<script lang="ts">
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+
+@Component
+export default class FilmForm extends Vue {
+  @Prop({
+    default () {
+      return {
+        type: Object,
+        default () {
+          return {
+            url: '',
+            type: 'html',
+            q: '',
+            hasResCheck: '',
+            needHost: false,
+            needFilter: false,
+            filmListQuery: '',
+            linkQuery: '',
+            titleQuery: ''
+          }
         }
       }
-    },
-    type: {
-      type: String,
-      default: 'add film'
     }
-  },
-  data() {
-    const form = this.$form.createForm(this)
-    return {
-      form,
-      filmType: '',
-      formItemCol: {
-        label: { span: 6 },
-        wrapper: { span: 12 }
+  }) readonly initialValue
+  @Prop({ default: 'add film' }) readonly type
+  form = this.$form.createForm(this)
+  filmType = ''
+  formItemCol = {
+    label: { span: 6 },
+    wrapper: { span: 12 }
+  }
+
+  @Watch('initialValue.type', { immediate: true })
+  onTypeChange (value) {
+    this.filmType = value || 'html'
+  }
+
+  testRule () {
+    this.form.validateFields((error) => {
+      if (!error) {
+        const name = prompt('输入搜索内容')
+        name && this.$socket.emit('test film rule', this.form.getFieldsValue(), name)
       }
-    }
-  },
-  watch: {
-    'initialValue.type': {
-      immediate: true,
-      handler(value) {
-        this.filmType = value || 'html'
+    })
+  }
+
+  handleSubmit (e) {
+    e && e.preventDefault()
+    this.form.validateFields((error) => {
+      if (!error) {
+        this.$socket.emit(this.type, this.form.getFieldsValue(), () => {
+          this.$message.info('ok')
+          this.$emit('submit-success')
+        })
       }
-    }
-  },
-  methods: {
-    testRule() {
-      this.form.validateFields((error) => {
-        if (!error) {
-          const name = prompt('输入搜索内容')
-          name && this.$socket.emit('test film rule', this.form.getFieldsValue(), name)
-        }
-      })
-    },
-    handleSubmit(e) {
-      e && e.preventDefault()
-      this.form.validateFields((error) => {
-        if (!error) {
-          this.$socket.emit(this.type, this.form.getFieldsValue(), () => {
-            this.$message.info('ok')
-            this.$emit('submit-success')
-          })
-        }
-      })
-    },
-    deleteFilm() {
-      this.$socket.emit('remove file', this.form.getFieldsValue().url, () => {
-        this.$message.success('删除成功')
-      })
-    }
+    })
+  }
+
+  deleteFilm () {
+    this.$socket.emit('remove file', this.form.getFieldsValue().url, () => {
+      this.$message.success('删除成功')
+    })
   }
 }
 </script>

@@ -16,7 +16,7 @@ export class Chess {
   static chessFamily = {}
   static activeInstance = [[], [], [], [], [], [], [], []]
 
-  constructor(x, y, colorName) {
+  constructor (x, y, colorName) {
     this.x = x
     this.y = y
     this.color = colorName
@@ -32,7 +32,7 @@ export class Chess {
     Chess.chessInstance['' + x + y] = this
   }
 
-  static draw(point) {
+  static draw (point) {
     const el = document.createElement('div')
     el.innerHTML = `<span class="inner-ball" style="width: ${CHESS_SIZE}px;height: ${CHESS_SIZE}px;"></span>`
     el.style.cssText = `left: ${point.x}px; top: ${point.y}px; width: ${CHESSBOARD_SIZE}px; height: ${CHESSBOARD_SIZE}px`
@@ -44,7 +44,7 @@ export class Chess {
    * 检测8个方向上棋子是否相连
    * @param instance
    */
-  static addFamily(instance) {
+  static addFamily (instance) {
     for (let i = 0; i < 8; i++) {
       const type = i >= 4 ? i - 4 : i
       const foundInstance = Chess.findChess(instance, i).instance
@@ -118,7 +118,7 @@ export class Chess {
    * @param instance
    * @returns {boolean}
    */
-  static beyondBoundary(instance) {
+  static beyondBoundary (instance) {
     return instance.x <= 0 || instance.x >= MAX_BOUNDARY || instance.y <= 0 || instance.y >= MAX_BOUNDARY
   }
 
@@ -128,7 +128,7 @@ export class Chess {
    * @param direction
    * @returns {*}
    */
-  static findEmpty(instance, direction) {
+  static findEmpty (instance, direction) {
     let output
     let step = 1
     while (output === undefined) {
@@ -155,7 +155,7 @@ export class Chess {
    * @param step
    * @returns {{instance: *, x: number, y: number}}
    */
-  static findChess(instance, direction, step = 1) {
+  static findChess (instance, direction, step = 1) {
     let x, y
     const instanceStep = CHESSBOARD_SIZE * step
     switch (direction) {
@@ -205,7 +205,7 @@ export class Chess {
    * @param y
    * @returns {boolean}
    */
-  static has(x, y) {
+  static has (x, y) {
     return !!Chess.chessInstance['' + x + y]
   }
 }

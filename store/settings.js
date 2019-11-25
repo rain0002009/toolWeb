@@ -9,7 +9,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setBackground(state, background) {
+  setBackground (state, background) {
     store.set('background', background)
     _.assign(state.background, background)
   }

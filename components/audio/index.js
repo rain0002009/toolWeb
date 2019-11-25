@@ -4,7 +4,7 @@ export default class MusicPlayer {
   // 这个属性可以让最后一个分析帧的数据随时间使值之间的过渡更平滑。
   static smoothingTimeConstant = 0.6
 
-  constructor(readyCallback) {
+  constructor (readyCallback) {
     this.ctx = new (AudioContext || window.webkitAudioContext)()
     this.gainNode = this.ctx.createGain()
     this.source = this.ctx.createBufferSource()
@@ -15,11 +15,11 @@ export default class MusicPlayer {
     this.dataArray = new Uint8Array(this.analyser.frequencyBinCount)
   }
 
-  decodeAudio(buffer) {
+  decodeAudio (buffer) {
     this.ctx.decodeAudioData(buffer, this.getBufferSuccess.bind(this))
   }
 
-  getBufferSuccess(buffer) {
+  getBufferSuccess (buffer) {
     // 填充音频buffer数据
     this.source.buffer = buffer
     // 连接节点对象
@@ -29,16 +29,16 @@ export default class MusicPlayer {
     this.callback.forEach(f => f && f())
   }
 
-  play(index = 0) {
+  play (index = 0) {
     this.source.start(index)
   }
 
-  getData() {
+  getData () {
     this.analyser.getByteFrequencyData(this.dataArray)
     return this.dataArray
   }
 
-  ready(f) {
+  ready (f) {
     this.callback.push(f)
   }
 }

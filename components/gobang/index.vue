@@ -2,7 +2,7 @@
   <div ref="gobang" class="gobang-main-box" :style="{padding: GOBANG_PADDING + 'px'}" @click="createChess">
     <div ref="boardBox" class="board-box">
       <div v-for="row in SIZE" :key="'row' + row" class="row">
-        <div v-for="col in SIZE" :key="'row' + row+'col'+col" class="col"></div>
+        <div v-for="col in SIZE" :key="'row' + row+'col'+col" class="col" />
       </div>
     </div>
   </div>
@@ -17,13 +17,13 @@ export default {
   props: {
     gameEndCallback: {
       type: Function,
-      default() {
+      default () {
         return () => {
         }
       }
     }
   },
-  data() {
+  data () {
     return {
       GOBANG_PADDING,
       SIZE,
@@ -31,27 +31,27 @@ export default {
     }
   },
   computed: {
-    boardBox() {
+    boardBox () {
       return this.$refs.boardBox
     },
-    gobang() {
+    gobang () {
       return this.$refs.gobang
     },
-    gobangBoundingClientRect() {
+    gobangBoundingClientRect () {
       return this.gobang.getBoundingClientRect()
     }
   },
-  mounted() {
+  mounted () {
     this.startGame()
   },
   methods: {
-    restart() {
+    restart () {
       this.game.restart()
     },
-    startGame() {
+    startGame () {
       this.game = new Game('black', 'white', this.boardBox, this.gameEndCallback)
     },
-    createChess(e) {
+    createChess (e) {
       let x = e.clientX - this.gobangBoundingClientRect.left - GOBANG_PADDING
       let y = e.clientY - this.gobangBoundingClientRect.top - GOBANG_PADDING
       x = x < 0 ? 0 : x > GOBANG_SIZE ? GOBANG_SIZE : x

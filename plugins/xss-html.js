@@ -7,7 +7,7 @@ const whiteList = {
   a: ['class']
 }
 
-function filterHtml(el, { value }) {
+function filterHtml (el, { value }) {
   el.innerHTML = xss(value, { whiteList })
 }
 

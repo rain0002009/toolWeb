@@ -1,17 +1,18 @@
 <template>
   <div class="awesome-text-box" @mousemove="handleMousemove">
-    <canvas></canvas>
+    <canvas />
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
 // thanks https://codepen.io/funxer/pen/KBmRoZ
 let canvas
 let ctx
 const layers = 4
 let size = 0
-let particles = []
-let targets = []
+let particles: any[] = []
+let targets: any[] = []
 const lerp = (t, v0, v1) => (1 - t) * v0 + t * v1
 const fov = 2000
 const viewDistance = 200
@@ -24,33 +25,36 @@ let animFrame
 let gap
 
 class Vector3 {
-  constructor(x, y, z) {
+  x: number
+  y: number
+  z: number
+
+  constructor (x, y, z) {
     this.x = x
     this.y = y
     this.z = z
   }
 
-  static fromScreenCoords(_x, _y, z = 0) {
+  static fromScreenCoords (_x, _y, z = 0) {
     const factor = fov / viewDistance
     const x = (_x - canvas.width / 2) / factor
     const y = (_y - canvas.height / 2) / factor
-
     return new Vector3(x, y, z)
   }
 
-  rotateX(angle) {
+  rotateX (angle) {
     const z = this.z * Math.cos(angle) - this.x * Math.sin(angle)
     const x = this.z * Math.sin(angle) + this.x * Math.cos(angle)
     return new Vector3(x, this.y, z)
   }
 
-  rotateY(angle) {
+  rotateY (angle) {
     const y = this.y * Math.cos(angle) - this.z * Math.sin(angle)
     const z = this.y * Math.sin(angle) + this.z * Math.cos(angle)
     return new Vector3(this.x, y, z)
   }
 
-  pp() {
+  pp () {
     const factor = fov / (viewDistance + this.z)
     const x = this.x * factor + canvas.width / 2
     const y = this.y * factor + canvas.height / 2
@@ -58,7 +62,7 @@ class Vector3 {
   }
 }
 
-function loop() {
+function loop () {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   for (let i = 0; i < speed; i++) {
     if (targets.length > 0) {
@@ -77,7 +81,7 @@ function loop() {
 
   particles
     .sort((pa, pb) => pb.target.z - pa.target.z)
-    .forEach((p, i) => {
+    .forEach((p, _i) => {
       if (p.interpolant < 1) {
         p.interpolant = Math.min(p.interpolant + 0.01, 1)
         p.position.x = lerp(p.interpolant, p.position.x, p.target.x)
@@ -102,95 +106,98 @@ function loop() {
   animFrame = requestAnimationFrame(loop)
 }
 
-export default {
-  name: 'AwesomeText',
-  props: {
-    text: {
-      type: String,
-      default: ''
-    }
-  },
-  data() {
-    return {}
-  },
-  computed: {
-    boxWidth() {
-      return this.$el.offsetWidth
-    },
-    boxHeight() {
-      return this.$el.offsetHeight
-    }
-  },
-  mounted() {
-    this.init()
-  },
-  methods: {
-    handleMousemove(e) {
-      const halfHeight = this.boxHeight / 2
-      const halfWidth = this.boxWidth / 2
-      targetRotationY = (e.clientY - halfHeight) / this.boxHeight
-      targetRotationX = (e.clientX - halfWidth) / this.boxWidth
-    },
-    /**
-     * 获取文字的像素信息
-     * @returns {ImageData}
-     */
-    getTextPoints() {
-      let fontSize = 150
-      const text = this.text
-      const c = document.createElement('canvas')
-      const cx = c.getContext('2d')
-      cx.font = `900 ${fontSize}px Arial`
-      let w = cx.measureText(text).width
-      const h = fontSize * 1.5
-      gap = 7
+@Component
+export default class ThreeDText extends Vue {
+  $el!: HTMLDivElement
+  startX = 0
+  startY = 0
+  @Prop() readonly text
 
-      // 自适应字体大小
-      while (w > this.boxWidth * 0.8) {
-        fontSize -= 1
-        cx.font = `900 ${fontSize}px Arial`
-        w = cx.measureText(text).width
-      }
-      if (fontSize < 100) gap = 6
-      if (fontSize < 70) gap = 4
-      if (fontSize < 40) gap = 2
-      size = Math.max(gap / 2, 1)
-      c.width = w
-      c.height = h
-      this.startX = Math.floor(this.startX - w / 2)
-      this.startY = Math.floor(this.startY - h / 2)
-      cx.fillStyle = '#000'
-      cx.font = `900 ${fontSize}px Arial`
-      cx.fillText(text, 0, fontSize)
-      return cx.getImageData(0, 0, w, h)
-    },
-    init() {
-      this.startX = this.boxWidth / 2
-      this.startY = this.boxHeight / 2
-      canvas = this.$el.querySelector('canvas')
-      canvas.width = this.boxWidth
-      canvas.height = this.boxHeight
-      ctx = canvas.getContext('2d')
-      cancelAnimationFrame(animFrame)
-      particles = []
-      targets = []
-      const data = this.getTextPoints()
-      for (let i = 0; i < data.data.length; i += 4) {
-        const rw = data.width * 4
-        const x = this.startX + Math.floor((i % rw) / 4)
-        const y = this.startY + Math.floor(i / rw)
+  get boxWidth () {
+    return this.$el.offsetWidth
+  }
 
-        if (data.data[i + 3] > 0 && x % gap === 0 && y % gap === 0) {
-          for (let j = 0; j < layers; j++) {
-            targets.push(Vector3.fromScreenCoords(x, y, j))
-          }
+  get boxHeight () {
+    return this.$el.offsetHeight
+  }
+
+  handleMousemove (e) {
+    const halfHeight = this.boxHeight / 2
+    const halfWidth = this.boxWidth / 2
+    targetRotationY = (e.clientY - halfHeight) / this.boxHeight
+    targetRotationX = (e.clientX - halfWidth) / this.boxWidth
+  }
+
+  /**
+   * 获取文字的像素信息
+   * @returns {ImageData}
+   */
+  getTextPoints () {
+    let fontSize = 150
+    const text = this.text
+    const c = document.createElement('canvas')
+    const cx: any = c.getContext('2d')
+    cx.font = `900 ${fontSize}px Arial`
+    let w = cx.measureText(text).width
+    const h = fontSize * 1.5
+    gap = 7
+
+    // 自适应字体大小
+    while (w > this.boxWidth * 0.8) {
+      fontSize -= 1
+      cx.font = `900 ${fontSize}px Arial`
+      w = cx.measureText(text).width
+    }
+    if (fontSize < 100) {
+      gap = 6
+    }
+    if (fontSize < 70) {
+      gap = 4
+    }
+    if (fontSize < 40) {
+      gap = 2
+    }
+    size = Math.max(gap / 2, 1)
+    c.width = w
+    c.height = h
+    this.startX = Math.floor(this.startX - w / 2)
+    this.startY = Math.floor(this.startY - h / 2)
+    cx.fillStyle = '#000'
+    cx.font = `900 ${fontSize}px Arial`
+    cx.fillText(text, 0, fontSize)
+    return cx.getImageData(0, 0, w, h)
+  }
+
+  init () {
+    this.startX = this.boxWidth / 2
+    this.startY = this.boxHeight / 2
+    canvas = this.$el.querySelector('canvas')
+    canvas.width = this.boxWidth
+    canvas.height = this.boxHeight
+    ctx = canvas.getContext('2d')
+    cancelAnimationFrame(animFrame)
+    particles = []
+    targets = []
+    const data = this.getTextPoints()
+    for (let i = 0; i < data.data.length; i += 4) {
+      const rw = data.width * 4
+      const x = this.startX + Math.floor((i % rw) / 4)
+      const y = this.startY + Math.floor(i / rw)
+
+      if (data.data[i + 3] > 0 && x % gap === 0 && y % gap === 0) {
+        for (let j = 0; j < layers; j++) {
+          targets.push(Vector3.fromScreenCoords(x, y, j))
         }
       }
-
-      targets = targets.sort((a, b) => a.x - b.x)
-      loop()
-      return false
     }
+
+    targets = targets.sort((a, b) => a.x - b.x)
+    loop()
+    return false
+  }
+
+  mounted () {
+    this.init()
   }
 }
 </script>

@@ -11,7 +11,7 @@
     </a-layout-sider>
     <a-layout-content>
       <div v-if="getBackground.enable" class="css-doodle-container">
-        <css-doodle ref="cssDoodle" v-safe-html="getBackground.data" class="css-doodle-background"></css-doodle>
+        <css-doodle ref="cssDoodle" v-safe-html="getBackground.data" class="css-doodle-background" />
       </div>
       <nuxt class="nuxt-child-body" />
     </a-layout-content>
@@ -55,7 +55,7 @@ import anime from 'animejs'
 import { mapGetters } from 'vuex'
 
 export default {
-  data() {
+  data () {
     return {
       emoji: { data: ['🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛'], index: 0 },
       menus: [
@@ -71,22 +71,22 @@ export default {
     ...mapGetters({
       getBackground: 'settings/getBackground'
     }),
-    selected() {
+    selected () {
       return [this.$route.path]
     }
   },
   watch: {
-    getBackground() {
+    getBackground () {
       setTimeout(() => {
         this.$refs.cssDoodle && this.$refs.cssDoodle.update()
       }, 0)
     }
   },
-  mounted() {
+  mounted () {
     this.animationTitle()
   },
   methods: {
-    animationTitle() {
+    animationTitle () {
       const originalTitle = document.title
       anime({
         targets: this.emoji,

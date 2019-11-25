@@ -4,16 +4,18 @@ module.exports = {
     browser: true,
     node: true
   },
+  plugins: ['@typescript-eslint'],
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@typescript-eslint/parser'
   },
   extends: [
-    '@nuxtjs'
+    '@nuxtjs/eslint-config-typescript'
   ],
   // add your custom rules here
   rules: {
-    'no-console': 1,
-    'no-new-func': 0,
-    'vue/html-self-closing': 0
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
+    'vue/no-v-html': 'off',
+    'import/named': 'off'
   }
 }

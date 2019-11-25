@@ -1,5 +1,5 @@
 <template>
-  <div class="awesome-audio"></div>
+  <div class="awesome-audio" />
 </template>
 
 <script>
@@ -14,12 +14,12 @@ const player = new MusicPlayer()
 const bufferLength = player.analyser.frequencyBinCount
 export default {
   name: 'XAudio',
-  mounted() {
+  mounted () {
     this.initCanvas()
     this.getAudio()
   },
   methods: {
-    getAudio() {
+    getAudio () {
       this.$socket.emit('get audio', AUDIO_URL, (res) => {
         player.decodeAudio(res)
       }, (error) => {
@@ -34,14 +34,14 @@ export default {
         isMusicEnd = true
       })
     },
-    initCanvas() {
+    initCanvas () {
       this.ctx = canvas.getContext('2d')
       canvas.width = this.$el.offsetWidth
       canvas.height = this.$el.offsetHeight
       this.$el.appendChild(canvas)
       this.draw()
     },
-    draw() {
+    draw () {
       drawAnimation = requestAnimationFrame(this.draw)
       isMusicEnd && cancelAnimationFrame(drawAnimation)
 

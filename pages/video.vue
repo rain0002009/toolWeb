@@ -5,14 +5,13 @@
         class="video-js vjs-default-skin vjs-big-play-centered"
         controls
         preload="none"
-      >
-      </video>
+      />
     </div>
     <div class="search-box">
       <a-input-search
         enter-button
         @search="onSearch"
-      ></a-input-search>
+      />
     </div>
   </div>
 </template>
@@ -25,17 +24,17 @@ import 'video.js/dist/video-js.min.css'
 let player = null
 export default {
   name: 'MyVideo',
-  mounted() {
+  mounted () {
     this.initVideo()
   },
   methods: {
-    onSearch(url) {
+    onSearch (url) {
       player.src(url)
       setTimeout(() => {
         player.play()
       }, 0)
     },
-    initVideo() {
+    initVideo () {
       player = player || VideoJs(this.$el.querySelector('video'), {
         liveui: true,
         width: window.innerWidth / 1.8,

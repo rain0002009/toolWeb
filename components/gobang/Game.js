@@ -8,7 +8,7 @@ export default class Game {
   static isEnd = false
   static gameEndCallback
 
-  constructor(playerColor, aiColor, box, gameEndCallback) {
+  constructor (playerColor, aiColor, box, gameEndCallback) {
     this.playerColor = playerColor
     this.aiColor = aiColor
     Game.gameEndCallback = gameEndCallback
@@ -17,7 +17,7 @@ export default class Game {
     Game.ai = new AI(aiColor)
   }
 
-  restart() {
+  restart () {
     AI.criticalArray = []
     Game.isEnd = false
     Chess.chessInstance = {}

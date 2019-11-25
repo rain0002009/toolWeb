@@ -12,7 +12,7 @@ config.dev = !(process.env.NODE_ENV === 'production')
 
 io.on('connection', require('./api/socketCallback'))
 
-async function start() {
+async function start () {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
 

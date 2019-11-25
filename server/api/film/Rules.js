@@ -15,28 +15,29 @@ _.forEach(ruleList.value(), function (value) {
   rules[value.url] = createCallback(value)
 })
 
-function addFilm(data) {
+function addFilm (data) {
   ruleList.push(data).write()
   rules[data.url] = createCallback(data)
 }
 
-function deleteFilm(url) {
+function deleteFilm (url) {
   const item = ruleList.find(['url', url]).value()
   db.get('filmRuleList').remove(item).write()
 }
 
-function editFilm(data) {
+function editFilm (data) {
   const key = data.url
   ruleList.find(['url', key]).assign(data).write()
   rules[key] = createCallback(data)
 }
 
-function createCallback({ needHost, type = 'html', ajaxType = 'post', isTest = false, hasResCheck, charset = 'utf8', filmListQuery, linkQuery, titleQuery = linkQuery, q, needFilter = false }) {
+function createCallback ({ needHost, type = 'html', ajaxType = 'post', isTest = false, hasResCheck, charset = 'utf8', filmListQuery, linkQuery, titleQuery = linkQuery, q, needFilter = false }) {
   return async function (urlString, browser, keyWord) {
     const host = new URL(urlString).origin
     const page = await browser.newPage()
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36')
     if (typeof hasResCheck !== 'function') {
+      // eslint-disable-next-line no-new-func
       hasResCheck = new Function('page', hasResCheck)
     }
     try {
@@ -55,7 +56,7 @@ function createCallback({ needHost, type = 'html', ajaxType = 'post', isTest = f
         let output = await page.$$eval(filmListQuery, (el, { host, needHost, linkQuery, titleQuery }) => {
           return [...el].map((item) => {
             const link = item.querySelector(linkQuery).getAttribute('href')
-            const title = item.querySelector(titleQuery).innerText
+            const title = item.querySelector(titleQuery).textContent
             return { link: needHost ? host + link : link, title }
           })
         }, { host, needHost, linkQuery, titleQuery })

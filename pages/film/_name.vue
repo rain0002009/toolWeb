@@ -8,20 +8,21 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapMutations } from 'vuex'
 
-export default {
+export default Vue.extend({
   name: 'FilmName',
-  data() {
+  data () {
     return {
       films: []
     }
   },
   watch: {
-    '$route': 'searchFilm'
+    $route: 'searchFilm'
   },
-  mounted() {
+  mounted () {
     this.searchFilm()
     this.getFilms()
   },
@@ -29,17 +30,17 @@ export default {
     ...mapMutations({
       setPercent: 'film/setPercent'
     }),
-    searchFilm() {
+    searchFilm () {
       this.$socket.emit('set film name', this.$route.params.name)
     },
-    getFilms() {
+    getFilms () {
       this.$socket.on('get films', (data, percent) => {
         this.setPercent(percent)
         this.films = this.films.concat(data)
       })
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

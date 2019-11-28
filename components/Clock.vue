@@ -2,7 +2,9 @@
   <div class="component-clock">
     <template v-for="(time, index) in nowText">
       <FlipItem v-if="time !== ':'" :key="index" :front="time || 0" :back="nextSecondsText[index] || 0" />
-      <p v-else :key="index" class="separate">:</p>
+      <p v-else :key="index" class="separate">
+        :
+      </p>
     </template>
   </div>
 </template>

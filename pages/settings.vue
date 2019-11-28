@@ -19,11 +19,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
 import _ from 'lodash'
 import { mapGetters, mapMutations } from 'vuex'
 
 @Component({
+  data () {
+    return {
+      form: this.$form.createForm(this)
+    }
+  },
   computed: {
     ...mapGetters({
       getBackground: 'settings/getBackground'
@@ -36,21 +41,20 @@ import { mapGetters, mapMutations } from 'vuex'
   }
 })
 export default class WebSettings extends Vue {
-  form = this.$form.createForm(this)
   setBackground
+  getBackground
   background = {
     enable: false,
     data: ''
   }
 
-  @Watch('getBackground', { deep: true, immediate: true })
-  onGetBackgroundChange (value) {
-    _.assign(this.background, value)
-  }
-
   handleSubmit (e) {
     e && e.preventDefault()
     this.setBackground(this.background)
+  }
+
+  created () {
+    _.assign(this.background, this.getBackground)
   }
 }
 </script>

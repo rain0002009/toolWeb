@@ -4,7 +4,7 @@
   "description": "个人练手网站",
   "author": "rain0002009",
   "private": true,
-  "executablePath": "C:\\Users\\rain0002009\\AppData\\Local\\Google\\Chrome SxS\\Application\\chrome",
+  "executablePath": "C:\\Users\\rain0\\AppData\\Local\\Google\\Chrome SxS\\Application\\chrome",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",
@@ -30,7 +30,10 @@
     "videojs-flash": "^2.2.1",
     "vue-property-decorator": "^8.3.0",
     "vuescroll": "^4.14.4",
-    "xss": "^1.0.6"
+    "xss": "^1.0.6",
+    "axios": "^0.19.0",
+    "consola": "^2.11.0",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@nuxt/types": "^0.3.4",

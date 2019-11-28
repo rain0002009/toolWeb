@@ -186,9 +186,6 @@ export default class PIC2ASCII extends Vue {
     }
 
     .avatar-uploader {
-      margin-top: 20px;
-      width: 128px;
-      height: 128px;
     }
 
     .control-box {

@@ -15,10 +15,9 @@ const run = (socket) => {
     callback(ruleList)
   })
   socket.emit('get rules', ruleList)
-  socket.on('set film name', async (filmName) => {
-    browserBack = await puppeteer.launch({
-      headless: true,
-      executablePath: pkg.executablePath
+  socket.on('set film name', async (filmName, browserURL) => {
+    browserBack = await puppeteer.connect({
+      browserURL: browserURL || pkg.browserURL
     })
     const percent = { total: Object.keys(rules).length, done: 0 }
     _.map(rules, (go, url) => go(url, browserBack, filmName).then(liNode => handleBack(liNode, socket, percent)))

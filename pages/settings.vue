@@ -1,11 +1,19 @@
 <template>
   <a-form class="page-setting" :form="form" @submit="handleSubmit">
+    <a-form-item label="chrome devtools-protocol url">
+      <a-tooltip placement="topLeft">
+        <template slot="title">
+          <span>在chrome主目录 运行 chrome --headless --remote-debugging-port=9222</span>
+        </template>
+        <a-input v-model="config.browserURL" placeholder="http://localhost:9222" />
+      </a-tooltip>
+    </a-form-item>
     <a-form-item label="开启背景">
-      <a-switch v-model="background.enable" />
+      <a-switch v-model="config.background.enable" />
     </a-form-item>
     <a-form-item label="网站背景">
       <a-textarea
-        v-model="background.data"
+        v-model="config.background.data"
         size="large"
         :rows="5"
         placeholder="访问 https://css-doodle.com 获取更多信息"
@@ -31,30 +39,33 @@ import { mapGetters, mapMutations } from 'vuex'
   },
   computed: {
     ...mapGetters({
-      getBackground: 'settings/getBackground'
+      getConfig: 'settings/getConfig'
     })
   },
   methods: {
     ...mapMutations({
-      setBackground: 'settings/setBackground'
+      setConfig: 'settings/setConfig'
     })
   }
 })
 export default class WebSettings extends Vue {
-  setBackground
-  getBackground
-  background = {
-    enable: false,
-    data: ''
+  setConfig
+  getConfig
+  config = {
+    browserURL: '',
+    background: {
+      enable: false,
+      data: ''
+    }
   }
 
   handleSubmit (e) {
     e && e.preventDefault()
-    this.setBackground(this.background)
+    this.setConfig(this.config)
   }
 
   created () {
-    _.assign(this.background, this.getBackground)
+    _.assign(this.config.background, this.getConfig)
   }
 }
 </script>

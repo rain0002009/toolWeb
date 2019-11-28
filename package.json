@@ -4,7 +4,7 @@
   "description": "个人练手网站",
   "author": "rain0002009",
   "private": true,
-  "executablePath": "C:\\Users\\rain0\\AppData\\Local\\Google\\Chrome SxS\\Application\\chrome",
+  "browserURL": "http://localhost:9222",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",

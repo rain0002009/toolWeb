@@ -11,8 +11,8 @@
       </a-menu>
     </a-layout-sider>
     <a-layout-content>
-      <div v-if="getBackground.enable" class="css-doodle-container">
-        <css-doodle ref="cssDoodle" v-safe-html="getBackground.data" class="css-doodle-background" />
+      <div v-if="getConfig.background.enable" class="css-doodle-container">
+        <css-doodle ref="cssDoodle" v-safe-html="getConfig.background.data" class="css-doodle-background" />
       </div>
       <nuxt class="nuxt-child-body" />
     </a-layout-content>
@@ -60,7 +60,7 @@ import ComponentClock from '@/components/Clock.vue'
 @Component({
   computed: {
     ...mapGetters({
-      getBackground: 'settings/getBackground'
+      getConfig: 'settings/getConfig'
     }),
     selected () {
       return [this.$route.path]

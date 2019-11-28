@@ -2,24 +2,29 @@ import store from 'store2'
 import _ from 'lodash'
 
 export const state = () => ({
-  background: {
-    enable: false,
-    data: ''
+  config: {
+    browserURL: '',
+    background: {
+      enable: false,
+      data: ''
+    }
   }
 })
 
 export const mutations = {
-  setBackground (state, background) {
-    store.set('background', background)
-    _.assign(state.background, background)
+  setConfig(state, data) {
+    store.set('config', data)
+    _.assign(state.config, data)
   }
 }
 
 export const getters = {
-  getBackground: (state) => {
-    return state.background.data ? state.background : store.has('background') ? store.get('background') : {
-      enable: false,
-      data: `:doodle { @grid: 1x35 / 100vw 100vh; }
+  getConfig: (state) => {
+    return state.config ? state.config : store.has('config') ? store.get('config') : {
+      browserURL: '',
+      background: {
+        enable: false,
+        data: `:doodle { @grid: 1x35 / 100vw 100vh; }
     :container {
         background: #ffcabb;
         background: linear-gradient(to top, #ffcabb 50%, #de93b6 100%);
@@ -62,6 +67,7 @@ export const getters = {
             @rand(0.1, 2.1)vw @rand(22, 30)vh .5px rgba(246, 212, 0, .6),
             @rand(0.1, 2.1)vw @rand(30, 40)vh .5px rgba(246, 212, 0, .8);
     }`
+      }
     }
   }
 }

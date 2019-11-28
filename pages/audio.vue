@@ -5,7 +5,7 @@
 <script>
 import MusicPlayer from '~/components/audio'
 
-const AUDIO_URL = 'http://dl.stream.qqmusic.qq.com/M500003OLo9i1O0BhW.mp3?vkey=82D2035054CFF1F26CC101111A7F5EFE17253C4E4DC587038342CCAF618EB976617A9D55F2A361DBA99ABAC2076C2A5B402B25D16829D350&guid=5150825362&fromtag=1'
+const AUDIO_URL = 'http://isure.stream.qqmusic.qq.com/C100001ZudDx0GBzQH.m4a?fromtag=32'
 const canvas = document.createElement('canvas')
 let drawAnimation
 let isMusicEnd = false

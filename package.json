@@ -33,7 +33,7 @@
     "xss": "^1.0.6",
     "axios": "^0.21.1",
     "consola": "^2.11.0",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@nuxt/types": "^0.3.4",

@@ -20,7 +20,7 @@
     "ant-design-vue": "^1.4.6",
     "cross-env": "^5.2.1",
     "css-doodle": "^0.6.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "iconv-lite": "^0.4.24",
     "nuxt": "^2.10.2",
     "puppeteer-core": "^1.20.0",
